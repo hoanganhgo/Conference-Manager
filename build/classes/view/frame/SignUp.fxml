@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="400.0" stylesheets="@../style/style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="view.controller.SignUpController">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff9900" height="68.0" stroke="BLACK" strokeType="INSIDE" width="400.0" />
+      <Label layoutX="135.0" layoutY="8.0" text="Đăng ký" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="36.0" />
+         </font>
+      </Label>
+      <TextField fx:id="name" layoutX="27.0" layoutY="94.0" prefHeight="35.0" prefWidth="347.0" promptText="Nhập họ và tên">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="email" layoutX="27.0" layoutY="159.0" prefHeight="35.0" prefWidth="347.0" promptText="Nhập Email">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="username" layoutX="27.0" layoutY="224.0" prefHeight="35.0" prefWidth="347.0" promptText="Nhập Username">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </TextField>
+      <PasswordField fx:id="password" layoutX="27.0" layoutY="289.0" prefHeight="41.0" prefWidth="347.0" promptText="Nhập Password">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </PasswordField>
+      <PasswordField fx:id="rePassword" layoutX="27.0" layoutY="354.0" prefHeight="41.0" prefWidth="347.0" promptText="Nhập lại Password">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </PasswordField>
+      <Label fx:id="notify" layoutX="29.0" layoutY="404.0" text="" textFill="RED">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Button fx:id="register" layoutX="142.0" layoutY="437.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="116.0" text="Đăng ký" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

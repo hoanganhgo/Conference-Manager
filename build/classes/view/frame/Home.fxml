@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="1280.0" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controller.HomeController">
+   <children>
+      <Label layoutX="394.0" layoutY="13.0" text="Ứng dụng quản lý hội nghị" textFill="#ff9900">
+         <font>
+            <Font name="System Bold" size="36.0" />
+         </font>
+      </Label>
+      <Button fx:id="login" layoutX="948.0" layoutY="18.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="140.0" text="Đăng nhập" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Button>
+      <Button fx:id="register" layoutX="1106.0" layoutY="18.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="140.0" text="Đăng ký" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Button>
+      <TableView fx:id="tbData" layoutX="30.0" layoutY="102.0" prefHeight="582.0" prefWidth="1218.0">
+        <columns>
+          <TableColumn fx:id="number" prefWidth="50.0" text="STT" />
+          <TableColumn fx:id="name" prefWidth="575.0" text="Tên hội nghị" />
+          <TableColumn fx:id="time" prefWidth="290" text="Thời gian diễn ra" />
+          <TableColumn fx:id="status" prefWidth="180" text="Trạng thái" />
+          <TableColumn fx:id="description" prefWidth="120" text="Mô tả" />
+        </columns>
+      </TableView>
+      <Label layoutX="30.0" layoutY="66.0" text="Danh sách hội nghị" textFill="#ff9900">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="label" layoutX="839.0" layoutY="76.0" text="Double Click vào hội nghị để xem chi tiết và đăng ký tham dự" textFill="#ff9900">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <MenuButton fx:id="persional" layoutX="1016.0" layoutY="22.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="230.0" style="-fx-background-color: white; -fx-border-color: #ff9900; -fx-border-radius: 15; -fx-background-radius: 15;" text="Xin chào! Hoàng Anh" visible="false">
+        <items>
+          <MenuItem fx:id="information" mnemonicParsing="false" text="Xem thông tin cá nhân" />
+          <MenuItem fx:id="logout" mnemonicParsing="false" text="Đăng xuất" />
+        </items>
+      </MenuButton>
+      <Button fx:id="myConference" layoutX="1070.0" layoutY="60.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="175.0" text="Hội nghị của tôi" textFill="WHITE" visible="false">
+         <font>
+            <Font name="System Bold" size="17.0" />
+         </font>
+      </Button>
+      <Button fx:id="admin" layoutX="945.0" layoutY="60.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="106.0" text="Admin" textFill="WHITE" visible="false">
+         <font>
+            <Font name="System Bold" size="17.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

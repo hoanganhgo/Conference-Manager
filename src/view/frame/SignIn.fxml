@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="320.0" prefWidth="400.0" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controller.SignInController">
+    <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff9900" height="68.0" stroke="BLACK" strokeType="INSIDE" width="400.0" />
+      <Label layoutX="107.0" layoutY="8.0" text="Đăng nhập" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="36.0" />
+         </font>
+      </Label>
+      <TextField fx:id="username" layoutX="27.0" layoutY="96.0" prefHeight="35.0" prefWidth="347.0" promptText="Nhập Username">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </TextField>
+      <PasswordField fx:id="password" layoutX="27.0" layoutY="167.0" prefHeight="41.0" prefWidth="347.0" promptText="Nhập Password">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </PasswordField>
+      <Label fx:id="notify" layoutX="27.0" layoutY="220.0" text=" " textFill="RED">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Button fx:id="login" layoutX="133.0" layoutY="250.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="135.0" stylesheets="@../style.css" text="Đăng nhập" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
