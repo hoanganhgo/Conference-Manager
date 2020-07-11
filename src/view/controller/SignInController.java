@@ -83,8 +83,11 @@ public class SignInController implements Initializable {
                 notify.setText("");
                 Business.authenticator=user;
                 
-                //Đóng 2 cửa sổ
+                //Đóng cửa sổ đăng nhập
                 ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+                
+                //Hiển thị alert thông báo
+                Business.alertInformation("Đăng nhập", "Đăng nhập thành công!");
                 
                 //Xử lý sau khi đăng nhập
                 signIn.setVisible(false);

@@ -114,6 +114,7 @@ public class InformationController implements Initializable {
                 this.persional.setText("Xin chào! "+Business.detachName(name.getText()));
             }else{
                 name.setEditable(true);
+                name.requestFocus();
                 imageName.setImage(new Image("././images/save.png"));
                 noteName.setText("Lưu lại");
             }
@@ -148,6 +149,7 @@ public class InformationController implements Initializable {
                 noteEmail.setText("Chỉnh sửa Email");
             }else{
                 email.setEditable(true);
+                email.requestFocus();
                 imageEmail.setImage(new Image("././images/save.png"));
                 noteEmail.setText("Lưu lại");
             }

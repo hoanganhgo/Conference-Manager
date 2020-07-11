@@ -1,5 +1,6 @@
 package dao;
 
+import entity.Attendance;
 import entity.Meeting;
 import java.util.List;
 import org.hibernate.Query;
@@ -35,5 +36,19 @@ public class MeetingDAO {
         List<Object[]> meetings=query.list();
         session.close();
         return meetings.get(0);
+    }
+    
+    //Lấy danh sách hội nghị của tôi
+    public List<Object[]> getMyConferences(int userId)
+    {
+        this.session=HibernateUtil.getSessionFactory().openSession();
+        Transaction tx=session.beginTransaction(); 
+        String hql="Select m.meetingId, m.name, m.time, m.shortDescription, m.location, a.status From "
+                +Meeting.class.getName()+" m, "+Attendance.class.getName()+" a Where a.meeting.meetingId=m.meetingId and a.user.userId=:userId order by m.time DESC";
+        Query query=session.createQuery(hql);
+        query.setParameter("userId", userId);
+        List<Object[]> list = query.list();
+        session.close();
+        return list;
     }
 }

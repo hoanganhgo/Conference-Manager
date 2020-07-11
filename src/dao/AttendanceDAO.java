@@ -48,7 +48,7 @@ public class AttendanceDAO {
         if (result.isEmpty()){
             return -1;  //Chưa đăng ký tham gia
         }else{
-            return Byte.toUnsignedInt((byte)result.get(0));
+            return (int)result.get(0);
         }
     }
 }

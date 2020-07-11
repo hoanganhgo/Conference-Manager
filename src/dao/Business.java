@@ -70,6 +70,12 @@ public class Business {
         return meetingDAO.getMeetingDetail(meetingId);
     }
     
+    public static List<Object[]> getMyConferences(int meetingId)
+    {
+        MeetingDAO meetingDAO=new MeetingDAO();
+        return meetingDAO.getMyConferences(meetingId);
+    }
+    
     //Function for Attendane ----------------------------
     public static Integer countParticipants(Integer meetingID)
     {
@@ -105,6 +111,17 @@ public class Business {
             return "Chưa đủ người";
         }
         
+    }
+    
+    public static String checkStatus(int status){
+        if (status==0){
+            return "Bị từ chối";
+        }else if (status==1){
+            return "Đã duyệt";
+        }else if(status==2){
+            return "Đang chờ duyệt";
+        }
+        return null;
     }
     
     //Xử lý đoạn miêu tả ngắn

@@ -1,18 +1,26 @@
 package view.controller;
 
 import dao.Business;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 public class DetailController implements Initializable {
 
@@ -47,13 +55,54 @@ public class DetailController implements Initializable {
     
     private int numSize;
     
+    private Button signIn;
+    
+    private Button register;
+    
+    private Label label;
+    
+    private MenuButton persional;
+    
+    private MenuItem information;
+    
+    private MenuItem logout;
+    
+    private Button myConference;
+    
+    private Button admin;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {       
        //Cài đặt sự kiện click đăng ký tham gia
         attend.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
             //Kiểm tra đăng nhập
             if (Business.authenticator==null){
-                Business.alertInformation("Đăng ký tham dự", "Bạn phải đăng nhập để có thể đăng ký tham dự hội nghị.");                
+                Business.alertInformation("Đăng ký tham dự", "Bạn phải đăng nhập để có thể đăng ký tham dự hội nghị.");     
+                
+                //Sự kiện đăng nhập
+                Parent frame=null;
+                FXMLLoader loader=null;
+                try {
+                    loader = new FXMLLoader(getClass().getResource("../frame/SignIn.fxml"));
+                    frame = loader.load();
+                } catch (IOException ex) {
+                    Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                    return;
+                }
+            
+                //Truyền Button cho frame sau
+                SignInController signInController=loader.getController();            
+                signInController.transferMessage(signIn, register, label, persional, information, logout, myConference, admin);
+            
+                //Khởi tạo màn hình đăng ký
+                Stage signIn=new Stage();
+                signIn.setTitle("Quản lý hội nghị");
+                Scene scene=new Scene(frame, 390, 320);
+                signIn.setScene(scene);
+                signIn.setResizable(false);
+                signIn.centerOnScreen();
+            
+                signIn.show();
                 return;
             }
             
@@ -107,6 +156,24 @@ public class DetailController implements Initializable {
         if (numParticipant>=size){
             attend.setDisable(true);
         }
-    }      
+    }
+    
+    public void setVisibleRegister(boolean bool){
+        this.attend.setVisible(bool);
+        if (!bool){
+            this.name.setLayoutX(520f);
+        }
+    }
+    
+    public void transferButton(Button login, Button register, Label label, MenuButton persional, MenuItem information, MenuItem logout, Button myConference, Button admin){
+        this.signIn=login;
+        this.register=register;
+        this.label=label;
+        this.persional=persional;
+        this.information=information;
+        this.logout=logout;
+        this.myConference=myConference;
+        this.admin=admin;
+    }
     
 }

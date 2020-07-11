@@ -12,12 +12,12 @@ public class Attendance  implements java.io.Serializable {
      private Integer attendanceId;
      private Meeting meeting;
      private User user;
-     private Byte status;
+     private int status;
 
     public Attendance() {
     }
 
-    public Attendance(Meeting meeting, User user, Byte status) {
+    public Attendance(Meeting meeting, User user, int status) {
        this.meeting = meeting;
        this.user = user;
        this.status = status;
@@ -50,11 +50,11 @@ public class Attendance  implements java.io.Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-    public Byte getStatus() {
+    public int getStatus() {
         return this.status;
     }
     
-    public void setStatus(Byte status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

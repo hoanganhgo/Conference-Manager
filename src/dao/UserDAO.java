@@ -52,6 +52,7 @@ public class UserDAO {
         Query query=session.createQuery(hql);
         query.setParameter("username", username);
         query.setParameter("password", password);
+
         List<Object[]> result=query.list();
         
         if (result.isEmpty()){

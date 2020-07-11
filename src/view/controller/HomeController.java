@@ -25,6 +25,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -71,6 +72,12 @@ public class HomeController implements Initializable {
     
     @FXML
     public Button admin;
+    
+    @FXML
+    public Button search;
+    
+    @FXML
+    public TextField searchBox;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -150,6 +157,7 @@ public class HomeController implements Initializable {
                 //Truyền dữ liệu cho frame detail
                 DetailController detailController= loader.getController();
                 detailController.transferMessage(data.getId(), data.getName(), date, location, size, data.getDescriptionContent(), longDescription, avatar);
+                detailController.transferButton(login, register, label, persional, information, logout, myConference, admin);
                 
                 //Khởi tạo frame
                 Stage detail=new Stage();
@@ -165,6 +173,41 @@ public class HomeController implements Initializable {
         });
         
         tbData.setItems(list);   
+        
+        //Cài đặt sự kiện tìm kiếm
+        search.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
+            search.setStyle("-fx-background-color: #ff9900;");
+          
+            String content=searchBox.getText().toLowerCase();
+            
+            list.clear();  //Xóa dữ liệu trên giao diện
+            
+            int number=1;
+            for (Object[] e : meetings){
+                String name=e[1].toString().toLowerCase();
+                String location=((Location)e[4]).getName().toLowerCase();
+                String description=e[3].toString().toLowerCase();
+                
+                if (name.contains(content) || location.contains(content) || description.contains(content)){
+                    //Kiểm tra tình trạng hội nghị
+                    Integer size=((Location)e[4]).getSize();
+                    Integer participants=Business.countParticipants((int)e[0]);
+                    String status = Business.checkStatus(participants, size, (Date)e[2]);
+                    String dateTime=Business.formatDateTime((Date)e[2]);
+            
+                    //Thêm hội nghị vào giao diện
+                    list.add(new MeetingModel((int)e[0], number++, e[1].toString(), dateTime, status, e[3].toString()));
+                }
+                    
+                
+            }
+            
+            tbData.setItems(list);
+        });
+        
+        search.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event)->{
+            search.setStyle("-fx-background-color: #ff5500;");
+        });
                 
         //Cài sự kiện click đăng ký
         register.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
