@@ -1,6 +1,7 @@
 package view.model;
 
 import dao.Business;
+import java.util.Date;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
@@ -13,15 +14,17 @@ public class MeetingModel {
     private Integer number;
     private String name;
     private String time;
+    private Date dateTime;
     private String status;
     private String descriptionContent;
     private MenuButton description=new MenuButton("Mô tả");
 
-    public MeetingModel(Integer id, Integer number, String name, String time, String status, String description) {
+    public MeetingModel(Integer id, Integer number, String name, Date dateTime, String status, String description) {
         this.id=id;
         this.number = number;
         this.name = name;
-        this.time = time;
+        this.dateTime=dateTime;
+        this.time = Business.formatDateTime(dateTime);
         this.status = status;
         this.descriptionContent=description;
         this.description.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent)->{
@@ -83,4 +86,14 @@ public class MeetingModel {
     public Integer getId() {
         return id;
     }
+
+    public Date getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
+    }
+    
+    
 }

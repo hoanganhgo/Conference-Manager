@@ -8,11 +8,13 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.Alert;
+import view.model.MeetingModel;
 
 public class Business {    
     public static User authenticator=null;
@@ -270,4 +272,39 @@ public class Business {
         alert.setContentText(content);
         alert.showAndWait();
     }
+    
+    public static void sortMeetingASC(ArrayList<MeetingModel> array)
+    {
+        for (int i=0;i<array.size()-1;i++){
+            int min=i;
+            for (int j=i+1;j<array.size();j++){
+                if (array.get(j).getDateTime().compareTo(array.get(min).getDateTime())<0){
+                    min=j;
+                }
+            }
+            if (min!=i){
+                MeetingModel temp=array.get(min);
+                array.set(min, array.get(i));
+                array.set(i, temp);         
+            }
+        }
+    }
+    
+    public static void sortMeetingDESC(ArrayList<MeetingModel> array)
+    {
+        for (int i=0;i<array.size()-1;i++){
+            int max=i;
+            for (int j=i+1;j<array.size();j++){
+                if (array.get(j).getDateTime().compareTo(array.get(max).getDateTime())>0){
+                    max=j;
+                }
+            }
+            if (max!=i){
+                MeetingModel temp=array.get(max);
+                array.set(max, array.get(i));
+                array.set(i, temp);         
+            }
+        }
+    }
+    
 }

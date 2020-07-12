@@ -112,10 +112,9 @@ public class HomeController implements Initializable {
             Integer participants=Business.countParticipants((int)e[0]);
 
             String status = Business.checkStatus(participants, size, (Date)e[2]);
-            String dateTime=Business.formatDateTime((Date)e[2]);
             
             //Thêm hội nghị vào giao diện
-            list.add(new MeetingModel((int)e[0], num++, e[1].toString(), dateTime, status, e[3].toString()));
+            list.add(new MeetingModel((int)e[0], num++, e[1].toString(), (Date)e[2], status, e[3].toString()));
         }
         
         //Cài đặt sự kiện khi double click vào hội nghị
@@ -126,23 +125,18 @@ public class HomeController implements Initializable {
                 
                 //Lấy vị trí được double click
                 Integer pos=data.getNumber()-1;
-                
-                //Lấy thời gian
-                Date date=(Date)meetings.get(pos)[2];
-                
-                //Lấy đối tượng vị trí
-                Location ln=(Location)meetings.get(pos)[4];
+                               
+                //Lấy dữ liệu miêu tả và hình ảnh
+                Object[] objects=Business.getMeetingDetail(data.getId());
+                Location ln=(Location)objects[0];
+                String longDescription=objects[1].toString();
+                String avatar=objects[2].toString();
                 
                 //Tạo chuỗi địa điểm
                 String location=ln.getName()+", "+ln.getAdress();
                 
                 //Lấy kích thước hội nghị
                 int size=ln.getSize();
-                
-                //Lấy dữ liệu miêu tả và hình ảnh
-                Object[] objects=Business.getMeetingDetail(data.getId());
-                String longDescription=objects[0].toString();
-                String avatar=objects[1].toString();
                 
                 //Load frame
                 Parent frame=null;
@@ -156,7 +150,7 @@ public class HomeController implements Initializable {
                 
                 //Truyền dữ liệu cho frame detail
                 DetailController detailController= loader.getController();
-                detailController.transferMessage(data.getId(), data.getName(), date, location, size, data.getDescriptionContent(), longDescription, avatar);
+                detailController.transferMessage(data.getId(), data.getName(), data.getDateTime(), location, size, data.getDescriptionContent(), longDescription, avatar);
                 detailController.transferButton(login, register, label, persional, information, logout, myConference, admin);
                 
                 //Khởi tạo frame
@@ -193,10 +187,9 @@ public class HomeController implements Initializable {
                     Integer size=((Location)e[4]).getSize();
                     Integer participants=Business.countParticipants((int)e[0]);
                     String status = Business.checkStatus(participants, size, (Date)e[2]);
-                    String dateTime=Business.formatDateTime((Date)e[2]);
             
                     //Thêm hội nghị vào giao diện
-                    list.add(new MeetingModel((int)e[0], number++, e[1].toString(), dateTime, status, e[3].toString()));
+                    list.add(new MeetingModel((int)e[0], number++, e[1].toString(), (Date)e[2], status, e[3].toString()));
                 }
                     
                 

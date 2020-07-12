@@ -29,7 +29,7 @@ public class MeetingDAO {
     {
         this.session=HibernateUtil.getSessionFactory().openSession();
         Transaction tx=session.beginTransaction();
-        String hql="Select e.longDescription, e.avatar From "
+        String hql="Select e.location, e.longDescription, e.avatar From "
                 +Meeting.class.getName()+" e where e.meetingId=:meetingId";
         Query query=session.createQuery(hql);
         query.setParameter("meetingId", meetingId);
@@ -44,7 +44,7 @@ public class MeetingDAO {
         this.session=HibernateUtil.getSessionFactory().openSession();
         Transaction tx=session.beginTransaction(); 
         String hql="Select m.meetingId, m.name, m.time, m.shortDescription, m.location, a.status From "
-                +Meeting.class.getName()+" m, "+Attendance.class.getName()+" a Where a.meeting.meetingId=m.meetingId and a.user.userId=:userId order by m.time DESC";
+                +Meeting.class.getName()+" m, "+Attendance.class.getName()+" a Where a.meeting.meetingId=m.meetingId and a.user.userId=:userId order by m.name DESC";
         Query query=session.createQuery(hql);
         query.setParameter("userId", userId);
         List<Object[]> list = query.list();

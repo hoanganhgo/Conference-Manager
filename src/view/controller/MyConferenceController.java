@@ -4,6 +4,7 @@ import dao.Business;
 import entity.Location;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -11,6 +12,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,6 +21,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -32,28 +37,59 @@ public class MyConferenceController implements Initializable {
     private TableView<MeetingModel> tbData;
     
     @FXML
-    public TableColumn<MeetingModel, Integer> number;
+    private TableColumn<MeetingModel, Integer> number;
     
     @FXML
-    public TableColumn<MeetingModel, String> name;
+    private TableColumn<MeetingModel, String> name;
     
     @FXML
-    public TableColumn<MeetingModel, String> time;
+    private TableColumn<MeetingModel, String> time;
     
     @FXML
-    public TableColumn<MeetingModel, String> status;
+    private TableColumn<MeetingModel, String> status;
     
     @FXML
-    public TableColumn<MeetingModel, Button> description;
+    private TableColumn<MeetingModel, Button> description;
     
     @FXML
-    public Label total;
+    private Label total;
     
     @FXML
-    public Button search;
+    private Button search;
     
     @FXML
-    public TextField searchBox;
+    private TextField searchBox;
+    
+    @FXML
+    private MenuButton sort;
+    
+    @FXML
+    private MenuItem newest;
+    
+    @FXML
+    private MenuItem oldest;
+    
+    @FXML
+    private MenuButton statusFilter;
+    
+    @FXML
+    private MenuItem accepted;
+    
+    @FXML
+    private MenuItem waiting;
+    
+    @FXML
+    private MenuItem rejected;
+    
+    @FXML
+    private MenuItem statusAll;
+    
+    @FXML
+    private MenuButton locationFilter;
+    
+    @FXML
+    private MenuItem locationAll;
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -83,10 +119,9 @@ public class MyConferenceController implements Initializable {
         for (Object[] e : meetings)
         {
             String status = Business.checkStatus((int)e[5]);
-            String dateTime=Business.formatDateTime((Date)e[2]);
             
             //Thêm hội nghị vào giao diện
-            list.add(new MeetingModel((int)e[0], num++, e[1].toString(), dateTime, status, e[3].toString()));
+            list.add(new MeetingModel((int)e[0], num++, e[1].toString(), (Date)e[2], status, e[3].toString()));
         }
         
         //Cài đặt sự kiện khi double click vào hội nghị
@@ -94,26 +129,18 @@ public class MyConferenceController implements Initializable {
             if (event.getClickCount()>=2){
                 //Lấy dữ liệu hội nghị
                 MeetingModel data=tbData.getSelectionModel().getSelectedItem();
-                
-                //Lấy vị trí được double click
-                Integer pos=data.getNumber()-1;
-                
-                //Lấy thời gian
-                Date date=(Date)meetings.get(pos)[2];
-                
-                //Lấy đối tượng vị trí
-                Location ln=(Location)meetings.get(pos)[4];
+              
+                //Lấy dữ liệu miêu tả và hình ảnh
+                Object[] objects=Business.getMeetingDetail(data.getId());
+                Location ln=(Location)objects[0];
+                String longDescription=objects[1].toString();
+                String avatar=objects[2].toString();
                 
                 //Tạo chuỗi địa điểm
                 String location=ln.getName()+", "+ln.getAdress();
                 
                 //Lấy kích thước hội nghị
                 int size=ln.getSize();
-                
-                //Lấy dữ liệu miêu tả và hình ảnh
-                Object[] objects=Business.getMeetingDetail(data.getId());
-                String longDescription=objects[0].toString();
-                String avatar=objects[1].toString();
                 
                 //Load frame
                 Parent frame=null;
@@ -127,7 +154,7 @@ public class MyConferenceController implements Initializable {
                 
                 //Truyền dữ liệu cho frame detail
                 DetailController detailController= loader.getController();
-                detailController.transferMessage(data.getId(), data.getName(), date, location, size, data.getDescriptionContent(), longDescription, avatar);
+                detailController.transferMessage(data.getId(), data.getName(), data.getDateTime(), location, size, data.getDescriptionContent(), longDescription, avatar);
                 detailController.setVisibleRegister(false);
                 
                 //Khởi tạo frame
@@ -163,21 +190,251 @@ public class MyConferenceController implements Initializable {
                 
                 if (name.contains(content) || location.contains(content) || description.contains(content)){
                     String status = Business.checkStatus((int)e[5]);
-                    String dateTime=Business.formatDateTime((Date)e[2]);
             
                     //Thêm hội nghị vào giao diện
-                    list.add(new MeetingModel((int)e[0], number++, e[1].toString(), dateTime, status, e[3].toString()));
+                    list.add(new MeetingModel((int)e[0], number++, e[1].toString(), (Date)e[2], status, e[3].toString()));
                 }
                     
                 
             }
             
             tbData.setItems(list);
+            
+            total.setText("Tổng số: "+(number-1));
+            sort.setText("Sắp xếp");
+            statusFilter.setText("Lọc theo trạng thái");
+            locationFilter.setText("Lọc theo địa điểm");
         });
         
         search.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event)->{
             search.setStyle("-fx-background-color: #ff5500;");
         });
+        
+        //Cài đặt sự kiện sắp xếp cũ nhất
+        oldest.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //Khởi tạo array MeetingModel
+                ArrayList<MeetingModel> array=new ArrayList<>();
+                
+                for (Object[] e : meetings){
+                    String status = Business.checkStatus((int)e[5]);
+                    array.add(new MeetingModel((int)e[0], 0, e[1].toString(), (Date)e[2], status, e[3].toString()));
+                }
+                
+                Business.sortMeetingASC(array);
+                list.clear();
+                
+                int number=1;
+                for (MeetingModel e : array){
+                    e.setNumber(number++);
+                    list.add(e);
+                }
+
+                tbData.setItems(list);
+                
+                total.setText("Tổng số: "+(number-1));
+                sort.setText("Cũ nhất");
+                statusFilter.setText("Lọc theo trạng thái");
+                locationFilter.setText("Lọc theo địa điểm");
+            }
+        });
+        
+        //Cài đặt sự kiện sắp xếp mới nhất
+        newest.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //Khởi tạo array MeetingModel
+                ArrayList<MeetingModel> array=new ArrayList<>();
+                
+                for (Object[] e : meetings){
+                    String status = Business.checkStatus((int)e[5]);
+                    array.add(new MeetingModel((int)e[0], 0, e[1].toString(), (Date)e[2], status, e[3].toString()));
+                }
+                
+                Business.sortMeetingDESC(array);
+                list.clear();
+                
+                int number=1;
+                for (MeetingModel e : array){
+                    e.setNumber(number++);
+                    list.add(e);
+                }
+
+                tbData.setItems(list);
+                
+                total.setText("Tổng số: "+(number-1));
+                sort.setText("Mới nhất");
+                statusFilter.setText("Lọc theo trạng thái");
+                locationFilter.setText("Lọc theo địa điểm");
+            }
+        });
+        
+        //Cài đặt sự kiện lọc hội nghị được duyệt
+        accepted.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                list.clear();
+                
+                int number=1;       
+                for (Object[] e : meetings)
+                {
+                    int code=(int)e[5];
+                    if (code==1){
+                        String status = Business.checkStatus(code);            
+                        //Thêm hội nghị vào giao diện
+                        list.add(new MeetingModel((int)e[0], number++, e[1].toString(), (Date)e[2], status, e[3].toString()));
+                    }
+                }
+                
+                tbData.setItems(list);
+                
+                total.setText("Tổng số: "+(number-1));
+                statusFilter.setText("Đã được duyệt");
+                sort.setText("Sắp xếp");
+                locationFilter.setText("Lọc theo địa điểm");
+            }
+        });
+        
+        //Cài đặt sự kiện lọc hội nghị đang chờ duyệt
+        waiting.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                list.clear();
+                
+                int number=1;       
+                for (Object[] e : meetings)
+                {
+                    int code=(int)e[5];
+                    if (code==2){
+                        String status = Business.checkStatus(code);            
+                        //Thêm hội nghị vào giao diện
+                        list.add(new MeetingModel((int)e[0], number++, e[1].toString(), (Date)e[2], status, e[3].toString()));
+                    }
+                }
+                
+                tbData.setItems(list);
+                
+                total.setText("Tổng số: "+(number-1));
+                statusFilter.setText("Đang chờ duyệt");
+                sort.setText("Sắp xếp");
+                locationFilter.setText("Lọc theo địa điểm");
+            }
+        });
+        
+        //Cài đặt sự kiện lọc hội nghị bị từ chối
+        rejected.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                list.clear();
+                
+                int number=1;       
+                for (Object[] e : meetings)
+                {
+                    int code=(int)e[5];
+                    if (code==0){
+                        String status = Business.checkStatus(code);            
+                        //Thêm hội nghị vào giao diện
+                        list.add(new MeetingModel((int)e[0], number++, e[1].toString(), (Date)e[2], status, e[3].toString()));
+                    }
+                }
+                
+                tbData.setItems(list);
+                
+                total.setText("Tổng số: "+(number-1));
+                statusFilter.setText("Bị từ chối");
+                sort.setText("Sắp xếp");
+                locationFilter.setText("Lọc theo địa điểm");
+            }
+        });
+        
+        //Cài đặt sự kiện lấy tất cả
+        statusAll.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                list.clear();
+                
+                int number=1;       
+                for (Object[] e : meetings)
+                {
+                    int code=(int)e[5];
+                    String status = Business.checkStatus(code);            
+                    //Thêm hội nghị vào giao diện
+                    list.add(new MeetingModel((int)e[0], number++, e[1].toString(), (Date)e[2], status, e[3].toString()));
+                }
+                
+                tbData.setItems(list);
+                
+                total.setText("Tổng số: "+(number-1));
+                statusFilter.setText("Lọc theo trạng thái");
+                sort.setText("Sắp xếp");            
+                locationFilter.setText("Lọc theo địa điểm");
+            }
+        });
+        
+        //Cài đặt sự kiện lọc theo địa điểm
+        ArrayList<Integer> codes=new ArrayList<>();
+        for (Object[] e : meetings){
+            //Lấy tên địa điểm
+            Location location=(Location)e[4];
+            
+            if (!codes.contains(location.getLocationId())){
+                codes.add(location.getLocationId());
+                String item = location.getName();
+            
+                //Khởi tạo MenuItem
+                MenuItem menuItem=new MenuItem(item);
+                
+                menuItem.setOnAction(a->{
+                    list.clear();
+                
+                    int number=1;       
+                    for (Object[] m : meetings)
+                    {
+                        int id=((Location)m[4]).getLocationId();
+                        if (id==location.getLocationId()){
+                            String status = Business.checkStatus((int)m[5]);            
+                            //Thêm hội nghị vào giao diện
+                            list.add(new MeetingModel((int)m[0], number++, m[1].toString(), (Date)m[2], status, m[3].toString()));
+                        }
+                    }
+                
+                    tbData.setItems(list);
+                
+                    total.setText("Tổng số: "+(number-1));
+                    locationFilter.setText(item);
+                    sort.setText("Sắp xếp");
+                    statusFilter.setText("Lọc theo trạng thái");
+                });
+            
+                locationFilter.getItems().add(menuItem);            
+            }
+        }
+        
+        //Cài đặt sự kiện lấy tất cả
+        locationAll.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                list.clear();
+                
+                int number=1;       
+                for (Object[] e : meetings)
+                {
+                    int code=(int)e[5];
+                    String status = Business.checkStatus(code);            
+                    //Thêm hội nghị vào giao diện
+                    list.add(new MeetingModel((int)e[0], number++, e[1].toString(), (Date)e[2], status, e[3].toString()));
+                }
+                
+                tbData.setItems(list);
+                
+                total.setText("Tổng số: "+(number-1));
+                sort.setText("Sắp xếp");
+                statusFilter.setText("Lọc theo trạng thái");
+                locationFilter.setText("Lọc theo địa điểm");
+            }
+        });
+        
     }    
     
 }
