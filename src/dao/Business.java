@@ -98,6 +98,15 @@ public class Business {
     }
     
     //Function for Location ------------------------------
+    public static List<Location> getAllLocation(){
+        LocationDAO locationDAO=new LocationDAO();
+        return locationDAO.getAllLocation();
+    }
+    
+    public static int addLocation(Location location){
+        LocationDAO locationDAO=new LocationDAO();
+        return locationDAO.addLocation(location);
+    }
   
     //Login funcion ---------------------
     //Kiểm tra tình trạng của hội nghị
@@ -305,6 +314,15 @@ public class Business {
                 array.set(i, temp);         
             }
         }
+    }
+    
+    public static String getShortDescription(int id, List<Object[]> data){
+        for (Object[] e : data){
+            if ((int)e[0]==id){
+                return e[3].toString();
+            }
+        }
+        return null;
     }
     
 }

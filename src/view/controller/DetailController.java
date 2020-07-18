@@ -69,7 +69,7 @@ public class DetailController implements Initializable {
     
     private Button myConference;
     
-    private Button admin;
+    private MenuButton admin;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {       
@@ -165,7 +165,7 @@ public class DetailController implements Initializable {
         }
     }
     
-    public void transferButton(Button login, Button register, Label label, MenuButton persional, MenuItem information, MenuItem logout, Button myConference, Button admin){
+    public void transferButton(Button login, Button register, Label label, MenuButton persional, MenuItem information, MenuItem logout, Button myConference, MenuButton admin){
         this.signIn=login;
         this.register=register;
         this.label=label;

@@ -71,7 +71,13 @@ public class HomeController implements Initializable {
     public Button myConference;
     
     @FXML
-    public Button admin;
+    public MenuButton admin;
+    
+    @FXML
+    public MenuItem manageConference;
+    
+    @FXML
+    public MenuItem manageUser;
     
     @FXML
     public Button search;
@@ -334,6 +340,28 @@ public class HomeController implements Initializable {
         
         myConference.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event)->{
             myConference.setStyle("-fx-background-color: #ff5500;");
+        });
+        
+        //Sự kiện click manager Conference
+        manageConference.setOnAction((ActionEvent event) -> {
+            Parent frame=null;
+            FXMLLoader loader=null;
+            try {
+                loader = new FXMLLoader(getClass().getResource("../frame/ManageConference.fxml"));
+                frame = loader.load();
+            } catch (IOException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                return;
+            }
+            
+            Stage conference=new Stage();
+            conference.setTitle("Quản lý hội nghị");
+            Scene scene=new Scene(frame, 1280, 700);
+            conference.setScene(scene);
+            conference.setResizable(false);
+            conference.centerOnScreen();
+            
+            conference.show();
         });
     }  
 }

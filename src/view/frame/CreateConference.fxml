@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="1280.0" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controller.CreateConferenceController">
+   <children>
+      <Label layoutX="511.0" layoutY="8.0" stylesheets="@../style/style.css" text="Tạo Hội Nghị Mới" textFill="#ff9900">
+         <font>
+            <Font name="System Bold" size="36.0" />
+         </font>
+      </Label>
+      <Label layoutX="27.0" layoutY="81.0" text="Tên Hội Nghị">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <TextField fx:id="name" layoutX="172.0" layoutY="79.0" prefHeight="35.0" prefWidth="508.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </TextField>
+      <Label layoutX="27.0" layoutY="136.0" text="Địa Điểm">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <Button fx:id="chooseLocation" alignment="CENTER" contentDisplay="RIGHT" layoutX="172.0" layoutY="132.0" mnemonicParsing="false" text="Chọn địa điểm">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/location.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <TextArea fx:id="location" editable="false" layoutX="172.0" layoutY="167.0" prefHeight="68.0" prefWidth="508.0" wrapText="true">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </TextArea>
+      <Label layoutX="27.0" layoutY="299.0" text="Thời Gian">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <DatePicker fx:id="datePicker" layoutX="475.0" layoutY="297.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="35.0" prefWidth="205.0" promptText="MM/dd/yyyy" />
+      <TextField fx:id="hour" alignment="CENTER_RIGHT" layoutX="172.0" layoutY="297.0" prefHeight="35.0" prefWidth="59.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="minute" alignment="CENTER_RIGHT" layoutX="271.0" layoutY="297.0" prefHeight="35.0" prefWidth="59.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </TextField>
+      <Label layoutX="234.0" layoutY="304.0" text="Giờ">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="332.0" layoutY="304.0" text="Phút">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="428.0" layoutY="304.0" text="Ngày">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="394.0" layoutY="297.0" text="-">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="27.0" layoutY="350.0" text="Mô tả ngắn">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <TextArea fx:id="shortDescription" layoutX="172.0" layoutY="350.0" prefHeight="78.0" prefWidth="1068.0" wrapText="true">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </TextArea>
+      <Label layoutX="27.0" layoutY="426.0" text="Mô tả chi tiết">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <TextArea fx:id="longDescription" layoutX="34.0" layoutY="456.0" prefHeight="180.0" prefWidth="1213.0" wrapText="true">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </TextArea>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="256.0" layoutX="744.0" layoutY="81.0" stroke="#ff9900" strokeType="INSIDE" width="495.0" />
+      <ImageView fx:id="image" fitHeight="245.0" fitWidth="485.0" layoutX="749.0" layoutY="86.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../avatar/1594997744344.jpg" />
+         </image></ImageView>
+      <Button fx:id="chooseImage" alignment="CENTER" contentDisplay="RIGHT" layoutX="913.0" layoutY="42.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="171.0" text="Chọn hình ảnh">
+         <graphic>
+            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/image_plus.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="create" layoutX="585.0" layoutY="642.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="205.0" text="Tạo Hội Nghị">
+         <font>
+            <Font name="System Bold" size="22.0" />
+         </font>
+      </Button>
+      <Label layoutX="28.0" layoutY="250.0" text="Sức chứa">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <TextField fx:id="size" alignment="CENTER_RIGHT" editable="false" layoutX="172.0" layoutY="247.0" prefHeight="35.0" prefWidth="59.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </TextField>
+      <Label layoutX="237.0" layoutY="254.0" text="Người">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

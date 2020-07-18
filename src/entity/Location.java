@@ -26,6 +26,12 @@ public class Location  implements java.io.Serializable {
        this.size = size;
        this.meetings = meetings;
     }
+    
+    public Location(String name, String adress, Integer size) {
+       this.name = name;
+       this.adress = adress;
+       this.size = size;
+    }
    
     public Integer getLocationId() {
         return this.locationId;

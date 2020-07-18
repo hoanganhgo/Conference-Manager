@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="300.0" prefWidth="600.0" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controller.CreateLocationController">
+   <children>
+      <Label layoutX="209.0" layoutY="14.0" text="Tạo Địa Điểm Mới" textFill="#ff9900">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="12.0" layoutY="66.0" text="Tên địa điểm">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <TextField fx:id="name" layoutX="132.0" layoutY="60.0" prefHeight="39.0" prefWidth="450.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </TextField>
+      <Label layoutX="12.0" layoutY="106.0" text="Địa chỉ">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <TextArea fx:id="address" layoutX="132.0" layoutY="110.0" prefHeight="55.0" prefWidth="450.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </TextArea>
+      <Label layoutX="12.0" layoutY="187.0" text="Sức chứa">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <TextField fx:id="size" alignment="CENTER_RIGHT" layoutX="132.0" layoutY="181.0" prefHeight="39.0" prefWidth="86.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </TextField>
+      <Label layoutX="227.0" layoutY="191.0" text="Người">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Button fx:id="confirm" layoutX="247.0" layoutY="235.0" mnemonicParsing="false" text="Xác Nhận">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
