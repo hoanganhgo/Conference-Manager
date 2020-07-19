@@ -51,4 +51,13 @@ public class MeetingDAO {
         session.close();
         return list;
     }
+    
+    //Tạo hội nghị mới
+    public void createConference(Meeting meeting){
+        this.session=HibernateUtil.getSessionFactory().openSession();
+        Transaction tx=session.beginTransaction();
+        session.save(meeting);
+        session.getTransaction().commit();
+        session.close();
+    }
 }

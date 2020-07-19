@@ -1,6 +1,7 @@
 package view.controller;
 
 import dao.Business;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
@@ -18,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -156,6 +158,17 @@ public class DetailController implements Initializable {
         if (numParticipant>=size){
             attend.setDisable(true);
         }
+        
+        File imageFile=new File(avatar.replace((char)92, (char)47));
+        Image image=new Image(imageFile.toURI().toString());       
+        this.avatar.setImage(image);
+        
+        //Căn chỉ vị trí
+        double scale=image.getHeight()/252;
+        double width=image.getWidth()/scale;
+        double height=image.getHeight()/scale;
+        double x=(514-width)/2;
+        this.avatar.setLayoutX(719+x); 
     }
     
     public void setVisibleRegister(boolean bool){

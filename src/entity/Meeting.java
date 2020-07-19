@@ -28,6 +28,15 @@ public class Meeting  implements java.io.Serializable {
     public Meeting(int meetingId){
         this.meetingId=meetingId;
     }
+    
+    public Meeting(Location location, String name, String shortDescription, String longDescription, String avatar, Date time) {
+       this.location = location;
+       this.name = name;
+       this.shortDescription = shortDescription;
+       this.longDescription = longDescription;
+       this.avatar = avatar;
+       this.time = time;
+    }
 
     public Meeting(Location location, String name, String shortDescription, String longDescription, String avatar, Date time, Set attendances) {
        this.location = location;

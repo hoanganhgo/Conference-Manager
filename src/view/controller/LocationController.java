@@ -4,6 +4,7 @@ import dao.Business;
 import entity.Location;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -49,6 +50,12 @@ public class LocationController implements Initializable {
     @FXML
     private Button addLocation; 
     
+    @FXML
+    private TextField searchBox;
+    
+    @FXML
+    private Button search;
+    
     private Location choice;
     private TextArea locationBox;
     private TextField sizeField;
@@ -75,6 +82,7 @@ public class LocationController implements Initializable {
         
         //Tạo danh sách hiển thị
         ObservableList<LocationModel> list=FXCollections.observableArrayList();
+        ArrayList<LocationModel> models=new ArrayList<>();
         
         int num=1;
         for (Location location : data){
@@ -91,10 +99,25 @@ public class LocationController implements Initializable {
                 ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
             });
             
-            list.add(new LocationModel(num++, location.getLocationId(), location.getName(), location.getAdress(), location.getSize(), choose));
+            models.add(new LocationModel(num++, location.getLocationId(), location.getName(), location.getAdress(), location.getSize(), choose));
         }
-        
+        list.addAll(models);
         tbData.setItems(list);
+        
+        //Cài đặt sự kiện tìm kiếm địa chỉ
+        search.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
+            list.clear();
+            int number=1;
+            String content=searchBox.getText().toLowerCase();
+            for (LocationModel e : models){
+                if (e.getName().toLowerCase().contains(content) || e.getAddress().toLowerCase().contains(content)){
+                    e.setNumber(number++);
+                    list.add(e);
+                }
+            }
+            
+            tbData.setItems(list);
+        });
         
         //Cài đặt sự kiện thêm địa điểm
         addLocation.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{

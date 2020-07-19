@@ -2,6 +2,7 @@ package view.controller;
 
 import dao.Business;
 import entity.Location;
+import entity.Meeting;
 import java.io.File;
 import static java.io.FileDescriptor.out;
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -73,7 +75,9 @@ public class CreateConferenceController implements Initializable {
     
     private Path imagePath=null;
     
-    private Location choice=new Location();
+    private String imageString=null;
+    
+    private Location choice=new Location(-1);
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -137,20 +141,80 @@ public class CreateConferenceController implements Initializable {
                 } catch (IOException ex) {
                     Logger.getLogger(CreateConferenceController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+
                 Image imageDestination=new Image(destination.toURI().toString());
                 image.setImage(imageDestination);
                 imagePath=destination.toPath();
+                imageString=destination.getPath();
                 
                 //Di chuyển ảnh ra vị trí trung tâm
                 double scale=imageFile.getHeight()/245;
                 double width=imageFile.getWidth()/scale;
                 double height=imageFile.getHeight()/scale;
-                double x=(495-width)/2;
+                double x=(485-width)/2;
                 image.setLayoutX(749+x);
             }
         });
         
+        //Cài đặt sự kiện tạo hội nghị
+        create.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
+            //Kiểm tra hợp lệ
+            if (name.getText().isEmpty()){
+                Business.alertError("Tạo hội nghị", "Tên hội nghị không được bỏ trống");
+                return;
+            }
+            
+            if (choice.getLocationId()<0){
+                Business.alertError("Tạo hội nghị", "Địa điểm tổ chức không được bỏ trống");
+                return;
+            }
+            
+            if (datePicker.getValue()==null){
+                Business.alertError("Tạo hội nghị", "Ngày/Tháng/Năm không được bỏ trống");
+                return;
+            }
+            
+            int hourInt=-1;
+            int minuteInt=-1;
+            try{
+                hourInt = Integer.parseInt(hour.getText());
+                minuteInt = Integer.parseInt(minute.getText());
+            }catch(NumberFormatException e){
+                Business.alertError("Tạo hội nghị", "Thời gian không hợp lệ");
+                return;
+            }
+            
+            if (shortDescription.getText().isEmpty()){
+                Business.alertError("Tạo hội nghị", "Miêu tả ngắn không được bỏ trống");
+                return;
+            }
+            
+            if (longDescription.getText().isEmpty()){
+                Business.alertError("Tạo hội nghị", "Miêu tả chi tiết không được bỏ trống");
+                return;
+            }
+            
+            if (imageString==null){
+                Business.alertError("Tạo hội nghị", "Bạn chưa chọn hình đại diện");
+                return;
+            }
+            
+            //Khởi tạo đối tượng thời gian
+            LocalDate a = datePicker.getValue();
+            Date date=new Date(a.getYear()-1900, a.getMonthValue(), a.getDayOfMonth(), hourInt, minuteInt);
+            
+            //Khởi tạo đối tượng vị trí
+            Location location=new Location();
+            location.setLocationId(1);
+            Meeting meeting = new Meeting(choice, name.getText(), shortDescription.getText(), longDescription.getText(), imageString, date);
+            Business.createConference(meeting);
+            
+            //Thông báo
+            Business.alertInformation("Tạo hội nghị", "Tạo hội nghị thành công!");
+            
+            //Đóng cửa sổ
+            ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+        });
         
     }    
     

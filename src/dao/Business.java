@@ -78,6 +78,12 @@ public class Business {
         return meetingDAO.getMyConferences(meetingId);
     }
     
+    //Tạo hội nghị mới
+    public static void createConference(Meeting meeting){
+        MeetingDAO meetingDAO=new MeetingDAO();
+        meetingDAO.createConference(meeting);
+    }
+    
     //Function for Attendane ----------------------------
     public static Integer countParticipants(Integer meetingID)
     {
