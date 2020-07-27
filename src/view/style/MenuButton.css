@@ -9,3 +9,7 @@
     -fx-border-color: #ff0000;
 }
 
+.menu-item{
+    -fx-font-size: 16px;
+}
+

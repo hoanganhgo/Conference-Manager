@@ -30,7 +30,7 @@
 }
 
 .menu-item{
-    -fx-font-size: 20px;
+    -fx-font-size: 16px;
 }
 
 .menu-button{
@@ -52,7 +52,7 @@
 }
 
 .menu-item .label{
-    -fx-font-size: 17px;
+    -fx-font-size: 16px;
     -fx-text-fill: black;
 }
 

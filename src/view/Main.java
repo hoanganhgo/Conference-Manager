@@ -17,7 +17,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("frame/ManageConference.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("frame/Home.fxml"));
         primaryStage.setTitle("Quản lý hội nghị");
         Scene scene=new Scene(root, 1280, 700);
         primaryStage.setScene(scene);

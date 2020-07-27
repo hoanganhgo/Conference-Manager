@@ -168,7 +168,7 @@ public class InformationController implements Initializable {
             stage.setHeight(425f);
             
             labelPassword.setText("Mật khẩu cũ");
-            labelPassword.setFont(Font.font(null, FontWeight.BOLD, 12));
+            labelPassword.setFont(Font.font(null, FontWeight.BOLD, 13));
             labelPassword.setLayoutY(225f);
             password.setText("");
             password.setEditable(true);

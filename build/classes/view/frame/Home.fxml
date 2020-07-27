@@ -39,7 +39,7 @@
         </columns>
       </TableView>
       
-        <TextField fx:id="searchBox" layoutX="30.0" layoutY="64.0" prefHeight="35.0" prefWidth="572.0" promptText="Tìm kiếm tên hội nghị, địa điểm, mô tả ngắn">
+        <TextField fx:id="searchBox" layoutX="141.0" layoutY="64.0" prefHeight="35.0" prefWidth="461.0" promptText="Tìm kiếm theo tên hội nghị">
          <font>
             <Font size="15.0" />
          </font>
@@ -67,7 +67,7 @@
       </MenuButton>
       <Button fx:id="myConference" layoutX="1070.0" layoutY="60.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="175.0" text="Hội nghị của tôi" textFill="WHITE" visible="false">
          <font>
-            <Font name="System Bold" size="17.0" />
+            <Font size="17.0" />
          </font>
       </Button>
       <MenuButton fx:id="admin" layoutX="920.0" layoutY="59.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="123.0" stylesheets="@../style/MenuButton.css" text="Admin" textFill="WHITE" visible="false">
@@ -77,6 +77,16 @@
         </items>
          <font>
             <Font name="System Bold" size="17.0" />
+         </font>
+      </MenuButton>
+      <MenuButton fx:id="searchFilter" layoutX="30.0" layoutY="63.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="107.0" stylesheets="@../style/MenuButton.css" text="Hội nghị">
+        <items>
+          <MenuItem fx:id="searchConference" mnemonicParsing="false" text="Hội nghị" />
+          <MenuItem fx:id="searchLocation" mnemonicParsing="false" text="Địa điểm" />
+          <MenuItem fx:id="searchDescription" mnemonicParsing="false" text="Mô tả" />
+        </items>
+         <font>
+            <Font size="16.0" />
          </font>
       </MenuButton>
    </children>

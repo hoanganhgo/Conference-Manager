@@ -33,7 +33,7 @@ import view.model.MeetingModel;
 
 public class HomeController implements Initializable {
     @FXML
-    public Button login;
+    private Button login;
     
     @FXML Button register;
     
@@ -41,49 +41,63 @@ public class HomeController implements Initializable {
     private TableView<MeetingModel> tbData;
     
     @FXML
-    public TableColumn<MeetingModel, Integer> number;
+    private TableColumn<MeetingModel, Integer> number;
     
     @FXML
-    public TableColumn<MeetingModel, String> name;
+    private TableColumn<MeetingModel, String> name;
     
     @FXML
-    public TableColumn<MeetingModel, String> time;
+    private TableColumn<MeetingModel, String> time;
     
     @FXML
-    public TableColumn<MeetingModel, String> status;
+    private TableColumn<MeetingModel, String> status;
     
     @FXML
-    public TableColumn<MeetingModel, Button> description;
+    private TableColumn<MeetingModel, Button> description;
     
     @FXML
-    public Label label;
+    private Label label;
     
     @FXML
-    public MenuButton persional;
+    private MenuButton persional;
     
     @FXML
-    public MenuItem information;
+    private MenuItem information;
     
     @FXML
-    public MenuItem logout;
+    private MenuItem logout;
     
     @FXML
-    public Button myConference;
+    private Button myConference;
     
     @FXML
-    public MenuButton admin;
+    private MenuButton admin;
     
     @FXML
-    public MenuItem manageConference;
+    private MenuItem manageConference;
     
     @FXML
-    public MenuItem manageUser;
+    private MenuItem manageUser;
     
     @FXML
-    public Button search;
+    private Button search;
     
     @FXML
-    public TextField searchBox;
+    private TextField searchBox;
+    
+    @FXML
+    private MenuButton searchFilter;
+    
+    @FXML
+    private MenuItem searchConference;   //type=1
+    
+    @FXML
+    private MenuItem searchLocation;   //type=2
+    
+    @FXML
+    private MenuItem searchDescription;    //type=3
+    
+    private int searchType=1;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -177,30 +191,60 @@ public class HomeController implements Initializable {
         //Cài đặt sự kiện tìm kiếm
         search.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
             search.setStyle("-fx-background-color: #ff9900;");
-          
+            list.clear();  //Xóa dữ liệu trên giao diện
             String content=searchBox.getText().toLowerCase();
             
-            list.clear();  //Xóa dữ liệu trên giao diện
-            
+           
             int number=1;
-            for (Object[] e : meetings){
-                String name=e[1].toString().toLowerCase();
-                String location=((Location)e[4]).getName().toLowerCase();
-                String description=e[3].toString().toLowerCase();
-                
-                if (name.contains(content) || location.contains(content) || description.contains(content)){
-                    //Kiểm tra tình trạng hội nghị
-                    Integer size=((Location)e[4]).getSize();
-                    Integer participants=Business.countParticipants((int)e[0]);
-                    String status = Business.checkStatus(participants, size, (Date)e[2]);
             
-                    //Thêm hội nghị vào giao diện
-                    list.add(new MeetingModel((int)e[0], number++, e[1].toString(), (Date)e[2], status, e[3].toString()));
-                }
-                    
+            switch (searchType){
+                case 1:
+                    for (Object[] e : meetings){
+                        String name=e[1].toString().toLowerCase();
                 
+                        if (name.contains(content)){
+                            //Kiểm tra tình trạng hội nghị
+                            Integer size=((Location)e[4]).getSize();
+                            Integer participants=Business.countParticipants((int)e[0]);
+                            String status = Business.checkStatus(participants, size, (Date)e[2]);
+            
+                            //Thêm hội nghị vào giao diện
+                            list.add(new MeetingModel((int)e[0], number++, e[1].toString(), (Date)e[2], status, e[3].toString()));
+                        }               
+                    } 
+                    break;
+                case 2:
+                    for (Object[] e : meetings){
+                        String location=((Location)e[4]).getName().toLowerCase();
+                
+                        if (location.contains(content)){
+                            //Kiểm tra tình trạng hội nghị
+                            Integer size=((Location)e[4]).getSize();
+                            Integer participants=Business.countParticipants((int)e[0]);
+                            String status = Business.checkStatus(participants, size, (Date)e[2]);
+            
+                            //Thêm hội nghị vào giao diện
+                            list.add(new MeetingModel((int)e[0], number++, e[1].toString(), (Date)e[2], status, e[3].toString()));
+                        }               
+                    } 
+                    break;
+                case 3:
+                    for (Object[] e : meetings){
+                        String description=e[3].toString().toLowerCase();
+                
+                        if (description.contains(content)){
+                            //Kiểm tra tình trạng hội nghị
+                            Integer size=((Location)e[4]).getSize();
+                            Integer participants=Business.countParticipants((int)e[0]);
+                            String status = Business.checkStatus(participants, size, (Date)e[2]);
+            
+                            //Thêm hội nghị vào giao diện
+                            list.add(new MeetingModel((int)e[0], number++, e[1].toString(), (Date)e[2], status, e[3].toString()));
+                        }               
+                    } 
+                    break;
             }
-            
+                       
             tbData.setItems(list);
         });
         
@@ -362,6 +406,59 @@ public class HomeController implements Initializable {
             conference.centerOnScreen();
             
             conference.show();
+        });
+        
+        //Sự kiện click manage Users
+        manageUser.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+               Parent frame=null;
+               FXMLLoader loader=null;
+               try {
+                  loader = new FXMLLoader(getClass().getResource("../frame/ManageUser.fxml"));
+                  frame = loader.load();
+               } catch (IOException ex) {
+                   Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                   return;
+               }
+            
+               Stage userScreen=new Stage();
+               userScreen.setTitle("Quản lý người dùng");
+               Scene scene=new Scene(frame, 1280, 700);
+               userScreen.setScene(scene);
+               userScreen.setResizable(false);
+               userScreen.centerOnScreen();
+            
+               userScreen.show();
+            }
+        });
+        
+        //search type
+        searchConference.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                searchType=1;
+                searchFilter.setText("Hội nghị");
+                searchBox.setPromptText("Tìm kiếm theo tên hội nghị");
+            }
+        });
+        
+        searchLocation.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                searchType=2;
+                searchFilter.setText("Địa điểm");
+                searchBox.setPromptText("Tìm kiếm theo địa điểm");
+            }
+        });
+        
+        searchDescription.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                searchType=3;
+                searchFilter.setText("Mô tả");
+                searchBox.setPromptText("Tìm kiếm theo mô tả");
+            }
         });
     }  
 }

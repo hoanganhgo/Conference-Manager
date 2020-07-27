@@ -28,12 +28,12 @@
           <TableColumn fx:id="description" prefWidth="120" text="Mô tả" />
         </columns>
       </TableView>
-      <Label fx:id="total" layoutX="30.0" layoutY="22.0" text="Tổng số: 25" textFill="#ff9900">
+      <Label fx:id="total" layoutX="1127.0" layoutY="20.0" text="Tổng số: 100" textFill="#ff9900">
          <font>
             <Font name="System Bold" size="20.0" />
          </font>
       </Label>
-      <TextField fx:id="searchBox" layoutX="30.0" layoutY="64.0" prefHeight="35.0" prefWidth="572.0" promptText="Tìm kiếm tên hội nghị, địa điểm, mô tả ngắn">
+      <TextField fx:id="searchBox" layoutX="140.0" layoutY="64.0" prefHeight="35.0" prefWidth="462.0" promptText="Tìm kiếm theo tên hội nghị">
          <font>
             <Font size="15.0" />
          </font>
@@ -47,7 +47,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <MenuButton fx:id="sort" layoutX="705.0" layoutY="60.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="135.0" style="-fx-border-radius: 15; -fx-background-radius: 15;" text="Sắp xếp">
+      <MenuButton fx:id="sort" layoutX="705.0" layoutY="60.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="135.0" style="-fx-border-radius: 15; -fx-background-radius: 15;" stylesheets="@../style/MenuButton.css" text="Sắp xếp">
         <items>
           <MenuItem fx:id="newest" mnemonicParsing="false" text="Sắp xếp ưu tiên mới nhất" />
           <MenuItem fx:id="oldest" mnemonicParsing="false" text="Sắp xếp ưu tiên cũ nhất" />
@@ -63,7 +63,7 @@
             <Font size="15.0" />
          </font>
       </MenuButton>
-      <MenuButton fx:id="statusFilter" layoutX="863.0" layoutY="16.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="190.0" style="-fx-border-radius: 15; -fx-background-radius: 15;" text="Lọc theo trạng thái">
+      <MenuButton fx:id="statusFilter" layoutX="863.0" layoutY="16.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="190.0" style="-fx-border-radius: 15; -fx-background-radius: 15;" stylesheets="@../style/MenuButton.css" text="Lọc theo trạng thái">
          <items>
             <MenuItem fx:id="accepted" mnemonicParsing="false" text="Đã duyệt" />
             <MenuItem fx:id="waiting" mnemonicParsing="false" text="Chờ duyệt" />
@@ -81,7 +81,7 @@
             <Font size="15.0" />
          </font>
       </MenuButton>
-      <MenuButton fx:id="locationFilter" layoutX="863.0" layoutY="59.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="382.0" style="-fx-border-radius: 15; -fx-background-radius: 15;" text="Lọc theo địa điểm">
+      <MenuButton fx:id="locationFilter" layoutX="863.0" layoutY="59.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="382.0" style="-fx-border-radius: 15; -fx-background-radius: 15;" stylesheets="@../style/MenuButton.css" text="Lọc theo địa điểm">
          <items>
             <MenuItem fx:id="locationAll" mnemonicParsing="false" text="Tất cả" />
          </items>
@@ -94,6 +94,17 @@
          </graphic>
          <font>
             <Font size="15.0" />
+         </font>
+      </MenuButton>
+      
+      <MenuButton fx:id="searchFilter" layoutX="30.0" layoutY="63.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="107.0" stylesheets="@../style/MenuButton.css" text="Hội nghị">
+        <items>
+          <MenuItem fx:id="searchConference" mnemonicParsing="false" text="Hội nghị" />
+          <MenuItem fx:id="searchLocation" mnemonicParsing="false" text="Địa điểm" />
+          <MenuItem fx:id="searchDescription" mnemonicParsing="false" text="Mô tả" />
+        </items>
+         <font>
+            <Font size="16.0" />
          </font>
       </MenuButton>
    </children>

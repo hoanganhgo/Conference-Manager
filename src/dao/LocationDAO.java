@@ -27,4 +27,15 @@ public class LocationDAO {
         session.close();
         return location.getLocationId();
     }
+    
+    //Lấy địa điểm khi biết id
+    public Location getLocationByID(int locationId){
+        this.session=HibernateUtil.getSessionFactory().openSession();
+        Transaction tx=session.beginTransaction();
+        String hql="From "+Location.class.getName()+" e Where e.locationId=:locationId";
+        Query query=session.createQuery(hql);
+        query.setParameter("locationId", locationId);
+        List<Location> list=query.list();
+        return list.get(0);
+    }
 }

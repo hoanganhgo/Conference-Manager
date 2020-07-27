@@ -2,8 +2,8 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -91,9 +91,9 @@
       </Button>
       <Label fx:id="notePassword" layoutX="502.0" layoutY="226.0" text="Thay đổi mật khẩu" />
 
-      <Label fx:id="labelNewPassword" layoutX="27.0" layoutY="267.0" text="NewPass" visible="false">
+      <Label fx:id="labelNewPassword" layoutX="27.0" layoutY="267.0" text="pass" visible="false">
          <font>
-            <Font name="System Bold" size="12.0" />
+            <Font name="System Bold" size="13.0" />
          </font>
       </Label>
       <PasswordField fx:id="newPassword" layoutX="120.0" layoutY="265.0" prefHeight="31.0" prefWidth="329.0" visible="false">
@@ -104,7 +104,7 @@
       
       <Label fx:id="labelRePassword" layoutX="28.0" layoutY="312.0" text="RePass" visible="false">
          <font>
-            <Font name="System Bold" size="12.0" />
+            <Font name="System Bold" size="13.0" />
          </font>
       </Label>
       <PasswordField fx:id="rePassword" layoutX="121.0" layoutY="312.0" prefHeight="31.0" prefWidth="329.0" visible="false">

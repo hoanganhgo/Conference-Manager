@@ -11,6 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,6 +20,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -62,6 +66,20 @@ public class ManageConferenceController implements Initializable {
     @FXML
     private Button createConference;
     
+    @FXML
+    private MenuButton searchFilter;
+    
+    @FXML
+    private MenuItem searchConference;   //type=1
+    
+    @FXML
+    private MenuItem searchLocation;   //type=2
+    
+    @FXML
+    private MenuItem searchDescription;    //type=3
+    
+    private int searchType=1;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         number.setCellValueFactory(new PropertyValueFactory<>("number"));
@@ -88,8 +106,9 @@ public class ManageConferenceController implements Initializable {
         ObservableList<ManageMeetingModel> list=FXCollections.observableArrayList();
         int num=1;
         
-        for (Object[] e : meetings){           
-            list.add(new ManageMeetingModel((int)e[0], num++, e[1].toString(), (Date)e[2]));
+        for (Object[] e : meetings){
+            Integer size=((Location)e[4]).getSize();
+            list.add(new ManageMeetingModel((int)e[0], num++, e[1].toString(), (Date)e[2], size));
         }
         
         //Cài đặt sự kiện khi double click vào hội nghị
@@ -145,22 +164,48 @@ public class ManageConferenceController implements Initializable {
         //Cài đặt sự kiện tìm kiếm
         search.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
             search.setStyle("-fx-background-color: #ff9900;");
-          
-            String content=searchBox.getText().toLowerCase();
-            list.add(new ManageMeetingModel(1, 1, "", new Date()));
-            list.clear();  //Xóa dữ liệu trên giao diện
             
+            list.clear();  //Xóa dữ liệu trên giao diện         
+            String content=searchBox.getText().toLowerCase();           
             int number=0;
-            for (Object[] e : meetings){
-                String name=e[1].toString().toLowerCase();
-                String location=((Location)e[4]).getName().toLowerCase();
-                String description=e[3].toString().toLowerCase();
+            
+            switch (searchType){
+                case 1:
+                    for (Object[] e : meetings){
+                        String name=e[1].toString().toLowerCase();
                 
-                if (name.contains(content) || location.contains(content) || description.contains(content)){           
-                    //Thêm hội nghị vào giao diện
-                    number+=1;
-                    list.add(new ManageMeetingModel((int)e[0], number, e[1].toString(), (Date)e[2]));
-                }
+                        if (name.contains(content)){           
+                            //Thêm hội nghị vào giao diện
+                            number+=1;
+                            Integer size=((Location)e[4]).getSize();
+                            list.add(new ManageMeetingModel((int)e[0], number, e[1].toString(), (Date)e[2], size));
+                        }
+                    }
+                    break;
+                case 2:
+                    for (Object[] e : meetings){
+                        String location=((Location)e[4]).getName().toLowerCase();
+                
+                        if (location.contains(content)){           
+                            //Thêm hội nghị vào giao diện
+                            number+=1;
+                            Integer size=((Location)e[4]).getSize();
+                            list.add(new ManageMeetingModel((int)e[0], number, e[1].toString(), (Date)e[2], size));
+                        }
+                    }
+                    break;
+                case 3:
+                    for (Object[] e : meetings){
+                        String description=e[3].toString().toLowerCase();
+                
+                        if (description.contains(content)){           
+                            //Thêm hội nghị vào giao diện
+                            number+=1;
+                            Integer size=((Location)e[4]).getSize();
+                            list.add(new ManageMeetingModel((int)e[0], number, e[1].toString(), (Date)e[2], size));
+                        }
+                    }
+                    break;
             }
             
             tbData.setItems(list);
@@ -171,27 +216,61 @@ public class ManageConferenceController implements Initializable {
         //Tạo sự kiện tạo hội nghị mới
         createConference.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
             Parent frame=null;
+            FXMLLoader loader=null;
             try {
-                frame = FXMLLoader.load(getClass().getResource("../frame/CreateConference.fxml"));
+                loader=new FXMLLoader(getClass().getResource("../frame/CreateConference.fxml"));
+                frame = loader.load();
             } catch (IOException ex) {
-                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ManageConferenceController.class.getName()).log(Level.SEVERE, null, ex);
                 return;
             }
+            
+            CreateConferenceController createConferenceController=loader.getController();
+            createConferenceController.initEventCreate();
                         
-            Stage signUp=new Stage();
-            signUp.setTitle("Tạo hội nghị mới");
+            Stage screenCreate=new Stage();
+            screenCreate.setTitle("Tạo hội nghị mới");
             Scene scene=new Scene(frame, 1280, 700);
-            signUp.setScene(scene);
-            signUp.setResizable(false);
-            signUp.centerOnScreen();
+            screenCreate.setScene(scene);
+            screenCreate.setResizable(false);
+            screenCreate.centerOnScreen();
                         
-            signUp.show();
+            screenCreate.show();
+
             
             createConference.setStyle("-fx-background-color: #ff9900;");
         });
         
         createConference.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event)->{
             createConference.setStyle("-fx-background-color: #ff5500;");
+        });
+        
+        //search type
+        searchConference.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                searchType=1;
+                searchFilter.setText("Hội nghị");
+                searchBox.setPromptText("Tìm kiếm theo tên hội nghị");
+            }
+        });
+        
+        searchLocation.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                searchType=2;
+                searchFilter.setText("Địa điểm");
+                searchBox.setPromptText("Tìm kiếm theo địa điểm");
+            }
+        });
+        
+        searchDescription.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                searchType=3;
+                searchFilter.setText("Mô tả");
+                searchBox.setPromptText("Tìm kiếm theo mô tả");
+            }
         });
     }    
     

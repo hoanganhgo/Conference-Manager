@@ -60,4 +60,26 @@ public class MeetingDAO {
         session.getTransaction().commit();
         session.close();
     }
+    
+    //Cập nhật hội nghị
+    public void updateConference(Meeting meeting){
+        this.session=HibernateUtil.getSessionFactory().openSession();
+        Transaction tx=session.beginTransaction();
+        session.update(meeting);
+        session.getTransaction().commit();
+        session.close();
+    }
+    
+    //Lấy hội nghị dựa vào Id
+    public Meeting getMeetingByID(int meetingId)
+    {
+        this.session=HibernateUtil.getSessionFactory().openSession();
+        Transaction tx=session.beginTransaction();
+        String hql="From "+Meeting.class.getName()+" e Where e.meetingId=:meetingId";
+        Query query=session.createQuery(hql);
+        query.setParameter("meetingId", meetingId);
+        List<Meeting> list=query.list();
+        session.close();
+        return list.get(0);
+    }
 }

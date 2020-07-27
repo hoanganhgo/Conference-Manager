@@ -17,9 +17,7 @@ import javafx.scene.control.Alert;
 import view.model.MeetingModel;
 
 public class Business {    
-    public static User authenticator=null;
-    //Function for Admin ----------------------
-    
+    public static User authenticator=null;    
     //Function for User ------------------------
     public static List<User> getAllUsers()
     {
@@ -61,6 +59,15 @@ public class Business {
         return userDAO.updatePassword(userId, oldPasswordHash, newPasswordHash);
     }
     
+    public static void setActiveUser(int userId, boolean active){
+        UserDAO userDAO=new UserDAO();
+        int activeInt=1;
+        if (!active){
+            activeInt=0;
+        }
+        userDAO.setActiveUser(userId, activeInt);
+    }
+    
     //Function for Meeting -----------------------
     public static List<Object[]> getAllMeetings(){
         MeetingDAO meetingDAO=new MeetingDAO();
@@ -78,11 +85,23 @@ public class Business {
         return meetingDAO.getMyConferences(meetingId);
     }
     
+    public static Meeting getMeetingByID(int meetingId)
+    {
+        MeetingDAO meetingDAO=new MeetingDAO();
+        return meetingDAO.getMeetingByID(meetingId);
+    }
+    
     //Tạo hội nghị mới
     public static void createConference(Meeting meeting){
         MeetingDAO meetingDAO=new MeetingDAO();
         meetingDAO.createConference(meeting);
     }
+    
+    public static void updateConference(Meeting meeting){
+        MeetingDAO meetingDAO=new MeetingDAO();
+        meetingDAO.updateConference(meeting);
+    }
+    
     
     //Function for Attendane ----------------------------
     public static Integer countParticipants(Integer meetingID)
@@ -91,16 +110,47 @@ public class Business {
         return attendanceDAO.countParticipants(meetingID);
     }
     
+    public static Integer countParticipanted(Integer meetingID)
+    {
+        AttendanceDAO attendanceDAO=new AttendanceDAO();
+        return attendanceDAO.countParticipanted(meetingID);
+    }
+    
     public static void attendConference(int meetingId, int userId)
     {
         AttendanceDAO attendanceDAO=new AttendanceDAO();
         attendanceDAO.attendConference(meetingId, userId);
     }
     
+    public static List<Object[]> getUserJoinAttendance(int meetingId){
+        AttendanceDAO attendanceDAO=new AttendanceDAO();
+        return attendanceDAO.getUserJoinAttendance(meetingId);
+    }
+    
     public static int getStatus(int meetingId, int userId)
     {
         AttendanceDAO attendanceDAO=new AttendanceDAO();
         return attendanceDAO.getStatus(meetingId, userId);
+    }
+    
+    public static void setStatusAttendance(int attendanceId, int status){
+        AttendanceDAO attendanceDAO=new AttendanceDAO();
+        attendanceDAO.setStatus(attendanceId, status);
+    }
+    
+    public static void rejectAll(int meetingId){
+        AttendanceDAO attendanceDAO=new AttendanceDAO();
+        attendanceDAO.rejectAll(meetingId);
+    }
+    
+    public static Integer countConference(int userId){
+        AttendanceDAO attendanceDAO=new AttendanceDAO();
+        return attendanceDAO.countConference(userId);
+    }
+    
+    public static void cancelIfLocked(int userId){
+        AttendanceDAO attendanceDAO=new AttendanceDAO();
+        attendanceDAO.cancelIfLocked(userId);
     }
     
     //Function for Location ------------------------------
@@ -112,6 +162,11 @@ public class Business {
     public static int addLocation(Location location){
         LocationDAO locationDAO=new LocationDAO();
         return locationDAO.addLocation(location);
+    }
+    
+    public static Location getLocationByID(int locationId){
+        LocationDAO locationDAO=new LocationDAO();
+        return locationDAO.getLocationByID(locationId);
     }
   
     //Login funcion ---------------------

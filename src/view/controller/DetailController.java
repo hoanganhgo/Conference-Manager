@@ -173,9 +173,6 @@ public class DetailController implements Initializable {
     
     public void setVisibleRegister(boolean bool){
         this.attend.setVisible(bool);
-        if (!bool){
-            this.name.setLayoutX(520f);
-        }
     }
     
     public void transferButton(Button login, Button register, Label label, MenuButton persional, MenuItem information, MenuItem logout, Button myConference, MenuButton admin){

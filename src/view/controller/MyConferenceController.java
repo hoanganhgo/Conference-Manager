@@ -90,6 +90,19 @@ public class MyConferenceController implements Initializable {
     @FXML
     private MenuItem locationAll;
     
+    @FXML
+    private MenuButton searchFilter;
+    
+    @FXML
+    private MenuItem searchConference;   //type=1
+    
+    @FXML
+    private MenuItem searchLocation;   //type=2
+    
+    @FXML
+    private MenuItem searchDescription;    //type=3
+    
+    private int searchType=1;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -178,26 +191,58 @@ public class MyConferenceController implements Initializable {
         search.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
             search.setStyle("-fx-background-color: #ff9900;");
           
-            String content=searchBox.getText().toLowerCase();
-            
             list.clear();  //Xóa dữ liệu trên giao diện
-            
+            String content=searchBox.getText().toLowerCase();                     
             int number=1;
-            for (Object[] e : meetings){
-                String name=e[1].toString().toLowerCase();
-                String location=((Location)e[4]).getName().toLowerCase();
-                String description=e[3].toString().toLowerCase();
-                
-                if (name.contains(content) || location.contains(content) || description.contains(content)){
-                    String status = Business.checkStatus((int)e[5]);
             
-                    //Thêm hội nghị vào giao diện
-                    list.add(new MeetingModel((int)e[0], number++, e[1].toString(), (Date)e[2], status, e[3].toString()));
-                }
-                    
+            switch (searchType){
+                case 1:
+                    for (Object[] e : meetings){
+                        String name=e[1].toString().toLowerCase();
                 
+                        if (name.contains(content)){
+                            //Kiểm tra tình trạng hội nghị
+                            Integer size=((Location)e[4]).getSize();
+                            Integer participants=Business.countParticipants((int)e[0]);
+                            String status = Business.checkStatus(participants, size, (Date)e[2]);
+            
+                            //Thêm hội nghị vào giao diện
+                            list.add(new MeetingModel((int)e[0], number++, e[1].toString(), (Date)e[2], status, e[3].toString()));
+                        }               
+                    } 
+                    break;
+                case 2:
+                    for (Object[] e : meetings){
+                        String location=((Location)e[4]).getName().toLowerCase();
+                
+                        if (location.contains(content)){
+                            //Kiểm tra tình trạng hội nghị
+                            Integer size=((Location)e[4]).getSize();
+                            Integer participants=Business.countParticipants((int)e[0]);
+                            String status = Business.checkStatus(participants, size, (Date)e[2]);
+            
+                            //Thêm hội nghị vào giao diện
+                            list.add(new MeetingModel((int)e[0], number++, e[1].toString(), (Date)e[2], status, e[3].toString()));
+                        }               
+                    } 
+                    break;
+                case 3:
+                    for (Object[] e : meetings){
+                        String description=e[3].toString().toLowerCase();
+                
+                        if (description.contains(content)){
+                            //Kiểm tra tình trạng hội nghị
+                            Integer size=((Location)e[4]).getSize();
+                            Integer participants=Business.countParticipants((int)e[0]);
+                            String status = Business.checkStatus(participants, size, (Date)e[2]);
+            
+                            //Thêm hội nghị vào giao diện
+                            list.add(new MeetingModel((int)e[0], number++, e[1].toString(), (Date)e[2], status, e[3].toString()));
+                        }               
+                    } 
+                    break;
             }
-            
+                       
             tbData.setItems(list);
             
             total.setText("Tổng số: "+(number-1));
@@ -435,6 +480,33 @@ public class MyConferenceController implements Initializable {
             }
         });
         
+        //search type
+        searchConference.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                searchType=1;
+                searchFilter.setText("Hội nghị");
+                searchBox.setPromptText("Tìm kiếm theo tên hội nghị");
+            }
+        });
+        
+        searchLocation.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                searchType=2;
+                searchFilter.setText("Địa điểm");
+                searchBox.setPromptText("Tìm kiếm theo địa điểm");
+            }
+        });
+        
+        searchDescription.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                searchType=3;
+                searchFilter.setText("Mô tả");
+                searchBox.setPromptText("Tìm kiếm theo mô tả");
+            }
+        });
     }    
     
 }

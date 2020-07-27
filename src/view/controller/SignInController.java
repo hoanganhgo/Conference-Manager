@@ -80,6 +80,12 @@ public class SignInController implements Initializable {
                 username.requestFocus();
                 return;
             }else{
+                //Chặn đăng nhập
+                if (user.getActive()==0){
+                    Business.alertError("Đăng Nhập", "Tài khoản của bạn đã bị khóa.\nHãy liên lạc với quản trị viên để biết thêm thông tin!");
+                    return;
+                }
+                
                 notify.setText("");
                 Business.authenticator=user;
                 

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controller.ManageUserController">
+    <children>
+      <Label layoutX="461.0" text="Quản Lý Người Dùng" textFill="#ff9900">
+         <font>
+            <Font name="System Bold" size="36.0" />
+         </font>
+      </Label>     
+      <TextField fx:id="searchBox" layoutX="172.0" layoutY="64.0" prefHeight="35.0" prefWidth="430.0" promptText="Tìm kiếm họ và tên" stylesheets="@../style/style.css">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </TextField>
+      <Button fx:id="search" layoutX="603.0" layoutY="64.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="52.0" stylesheets="@../style/style.css">
+         <graphic>
+            <ImageView fitHeight="23.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/search.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      
+      <TableView fx:id="tbData" layoutX="30.0" layoutY="102.0" prefHeight="582.0" prefWidth="1218.0" stylesheets="@../style/table.css">
+        <columns>
+          <TableColumn fx:id="number" prefWidth="50.0" text="STT" />
+          <TableColumn fx:id="fullname" prefWidth="386.0" text="Họ và Tên" />
+          <TableColumn fx:id="username" prefWidth="261.0" text="Username" />
+          <TableColumn fx:id="email" prefWidth="333.0" text="Email" />
+          <TableColumn fx:id="numberOfConference" prefWidth="125.0" text="Đã tham dự" />
+          <TableColumn fx:id="lock" prefWidth="62.0" text="Chặn" />
+        </columns>
+      </TableView>
+      <Label fx:id="total" layoutX="1125.0" layoutY="63.0" text="Tổng số: 100" textFill="#ff9900">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <MenuButton fx:id="sort" layoutX="680.0" layoutY="62.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="261.0" stylesheets="@../style/MenuButton.css" text="Sắp xếp">
+        <items>
+          <MenuItem fx:id="descrease" mnemonicParsing="false" text="Giảm dần số lượt tham dự" />
+          <MenuItem fx:id="increase" mnemonicParsing="false" text="Tăng dần số lượt tham dự" />
+          <MenuItem fx:id="sortname" mnemonicParsing="false" text="Sắp xếp theo tên" />
+        </items>
+         <font>
+            <Font size="16.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/sort.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </MenuButton>
+      <MenuButton fx:id="filter" layoutX="958.0" layoutY="62.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="160.0" stylesheets="@../style/MenuButton.css" text="Lọc">
+        <items>
+          <MenuItem fx:id="unlocked" mnemonicParsing="false" text="Không chặn" />
+          <MenuItem fx:id="locked" mnemonicParsing="false" text="Bị chặn" />
+          <MenuItem fx:id="allStatus" mnemonicParsing="false" text="Tất cả" />
+        </items>
+         <font>
+            <Font size="16.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/filter.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </MenuButton>
+      <MenuButton fx:id="searchFilter" layoutX="31.0" layoutY="62.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="137.0" stylesheets="@../style/MenuButton.css" text="Họ và Tên">
+        <items>
+          <MenuItem fx:id="searchName" mnemonicParsing="false" text="Họ và Tên" />
+          <MenuItem fx:id="searchUsername" mnemonicParsing="false" text="Username" />
+          <MenuItem fx:id="searchEmail" mnemonicParsing="false" text="Email" />
+        </items>
+         <font>
+            <Font size="16.0" />
+         </font>
+      </MenuButton>
+   </children>
+</AnchorPane>

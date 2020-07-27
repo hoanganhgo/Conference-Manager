@@ -1,10 +1,26 @@
 package view.model;
 
 import dao.Business;
+import entity.Meeting;
+import entity.Location;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+import view.controller.ApprovalController;
+import view.controller.CreateConferenceController;
+import view.controller.DetailController;
+import view.controller.HomeController;
 
 public class ManageMeetingModel {
     private int id;
@@ -16,7 +32,7 @@ public class ManageMeetingModel {
     private Button attended;
     private Button edit;
 
-    public ManageMeetingModel(int id, int number, String name, Date date) {
+    public ManageMeetingModel(int id, int number, String name, Date date, Integer size) {
         this.id = id;
         this.number = number;
         this.name = name;
@@ -30,6 +46,70 @@ public class ManageMeetingModel {
         imageView.setFitWidth(20);
         this.edit = new Button();
         this.edit.setGraphic(imageView);
+        
+        this.requirement.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
+            //Load frame
+            Parent frame=null;
+            FXMLLoader loader=null;
+            try {
+                loader=new FXMLLoader(getClass().getResource("../frame/Approval.fxml"));
+                frame = loader.load();
+            } catch (IOException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                
+            //Truyền dữ liệu cho frame list users
+            ApprovalController approvalController = loader.getController();
+            approvalController.transferData(id, name, size);
+                
+            //Khởi tạo frame users
+            Stage users=new Stage();
+            users.setTitle("Danh sách đăng ký tham dự");
+                
+            Scene scene=new Scene(frame, 1280,700);
+            users.setScene(scene);
+            users.setResizable(false);
+            users.centerOnScreen();
+                
+            users.show();
+        });
+        
+        this.edit.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
+            Parent frame=null;
+            FXMLLoader loader=null;
+            try {
+                loader=new FXMLLoader(getClass().getResource("../frame/CreateConference.fxml"));
+                frame = loader.load();
+            } catch (IOException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                return;
+            }
+            
+            //Lấy dữ liệu
+            Meeting meeting=Business.getMeetingByID(id);
+
+            Location location=Business.getLocationByID(meeting.getLocation().getLocationId());
+            String locationString=location.getName()+", "+location.getAdress();
+            
+            SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd");
+            String dateString=formatter.format(meeting.getTime());
+            
+            CreateConferenceController createConferenceController=loader.getController();
+            createConferenceController.transferEdit(meeting.getName(), meeting.getLocation().getLocationId(), locationString, location.getSize(), meeting.getTime().getHours(), meeting.getTime().getMinutes(), dateString, meeting.getShortDescription(), meeting.getLongDescription(), meeting.getAvatar());
+            createConferenceController.initEventUpdate(id);
+                        
+            Stage editConference=new Stage();
+            editConference.setTitle("Chỉnh sửa hội nghị");
+            Scene scene=new Scene(frame, 1280, 700);
+            editConference.setScene(scene);
+            editConference.setResizable(false);
+            editConference.centerOnScreen();
+                        
+            editConference.show();
+            
+            //Đóng cửa sổ hiện tại
+            ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+        });
     }
 
     public int getId() {

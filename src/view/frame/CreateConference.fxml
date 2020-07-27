@@ -13,7 +13,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="1280.0" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controller.CreateConferenceController">
    <children>
-      <Label layoutX="511.0" layoutY="8.0" stylesheets="@../style/style.css" text="Tạo Hội Nghị Mới" textFill="#ff9900">
+      <Label fx:id="label" layoutX="511.0" layoutY="8.0" stylesheets="@../style/style.css" text="Tạo Hội Nghị Mới" textFill="#ff9900">
          <font>
             <Font name="System Bold" size="36.0" />
          </font>
@@ -143,5 +143,17 @@
             <Font size="16.0" />
          </font>
       </Label>
+      <Button fx:id="btnBack" layoutX="6.0" layoutY="4.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="143.0" style="-fx-background-color: #ffffff; -fx-background-radius: 60; -fx-border-radius: 60;" text="Trở Về">
+         <graphic>
+            <ImageView fitHeight="58.0" fitWidth="73.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/back.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

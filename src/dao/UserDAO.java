@@ -8,8 +8,7 @@ import org.hibernate.Transaction;
 
 public class UserDAO {
     Session session=null;
-    
-    
+        
     public List<User> getAllUser()
     {
         this.session=HibernateUtil.getSessionFactory().openSession();
@@ -127,5 +126,17 @@ public class UserDAO {
             session.close();
             return true;
         }        
+    }
+    
+    public void setActiveUser(int userId, int active){
+        this.session=HibernateUtil.getSessionFactory().openSession();
+        Transaction tx=session.beginTransaction();
+        String hql="Update "+User.class.getName()+" e set e.active=:active where e.userId=:userId";
+        Query query=session.createQuery(hql);
+        query.setParameter("active", (byte)active);
+        query.setParameter("userId", userId);
+        query.executeUpdate();
+        session.getTransaction().commit();
+        session.close();
     }
 }
