@@ -81,6 +81,19 @@ public class AttendanceDAO {
         session.close();
     }
     
+    //Từ chối tham dự nếu hội nghị đã diễn ra
+    public void rejectIfOutTime(int userId, int meetingId){
+        this.session=HibernateUtil.getSessionFactory().openSession();
+        Transaction tx=session.beginTransaction();
+        String hql="Update "+Attendance.class.getName()+" e set e.status=0 Where e.user.userId=:userId and e.meeting.meetingId=:meetingId";
+        Query query=session.createQuery(hql);
+        query.setParameter("userId", userId);
+        query.setParameter("meetingId", meetingId);
+        query.executeUpdate();
+        session.getTransaction().commit();
+        session.close();
+    }
+    
     //Từ chối tất cả yêu cầu tham dự hội nghị còn lại
     public void rejectAll(int meetingId){
         this.session=HibernateUtil.getSessionFactory().openSession();

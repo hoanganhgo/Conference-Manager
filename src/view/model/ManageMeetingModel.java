@@ -78,8 +78,12 @@ public class ManageMeetingModel {
             });
         }
           
-        
         this.edit.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
+            if ((new Date()).compareTo(date)>=0){
+                Business.alertError("Chỉnh sửa", "Bạn không thể chỉnh sửa hội nghị đã diễn ra");
+                return;
+            }
+            
             Parent frame=null;
             FXMLLoader loader=null;
             try {

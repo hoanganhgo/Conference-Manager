@@ -135,9 +135,15 @@ public class MyConferenceController implements Initializable {
         for (Object[] e : meetings)
         {
             String status = Business.checkStatus((int)e[5]);
+            Date date = (Date)e[2];
+            Date current=new Date();
+            if (current.compareTo(date)>=0 && (int)e[5]==2){
+                status="Bị từ chối";
+                Business.rejectIfOutTime(Business.authenticator.getUserId(), (int)e[0]);
+            }
             
             //Thêm hội nghị vào giao diện
-            list.add(new MeetingModel((int)e[0], num++, e[1].toString(), (Date)e[2], status, e[3].toString()));
+            list.add(new MeetingModel((int)e[0], num++, e[1].toString(), date, status, e[3].toString()));
         }
         
         //Cài đặt sự kiện khi double click vào hội nghị
@@ -177,7 +183,7 @@ public class MyConferenceController implements Initializable {
                 
                 //Khởi tạo frame
                 Stage detail=new Stage();
-                detail.setTitle("Quản lý hội nghị");
+                detail.setTitle("Chi tiết hội nghị");
                 
                 Scene scene=new Scene(frame, 1280,700);
                 detail.setScene(scene);

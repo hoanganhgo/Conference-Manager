@@ -214,7 +214,7 @@ public class HomeController implements Initializable {
                 
                 //Khởi tạo frame
                 Stage detail=new Stage();
-                detail.setTitle("Quản lý hội nghị");
+                detail.setTitle("Chi tiết hội nghị");
                 
                 Scene scene=new Scene(frame, 1280,700);
                 detail.setScene(scene);
@@ -387,7 +387,7 @@ public class HomeController implements Initializable {
             }
                         
             Stage signUp=new Stage();
-            signUp.setTitle("Quản lý hội nghị");
+            signUp.setTitle("Đăng ký");
             Scene scene=new Scene(frame, 390, 500);
             signUp.setScene(scene);
             signUp.setResizable(false);
@@ -420,7 +420,7 @@ public class HomeController implements Initializable {
             
             //Khởi tạo màn hình đăng ký
             Stage signIn=new Stage();
-            signIn.setTitle("Quản lý hội nghị");
+            signIn.setTitle("Đăng nhập");
             Scene scene=new Scene(frame, 390, 320);
             signIn.setScene(scene);
             signIn.setResizable(false);

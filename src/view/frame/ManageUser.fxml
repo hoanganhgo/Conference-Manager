@@ -38,10 +38,10 @@
         <columns>
           <TableColumn fx:id="number" prefWidth="50.0" text="STT" />
           <TableColumn fx:id="fullname" prefWidth="386.0" text="Họ và Tên" />
-          <TableColumn fx:id="username" prefWidth="261.0" text="Username" />
-          <TableColumn fx:id="email" prefWidth="333.0" text="Email" />
+          <TableColumn fx:id="username" prefWidth="256.0" text="Username" />
+          <TableColumn fx:id="email" prefWidth="328.0" text="Email" />
           <TableColumn fx:id="numberOfConference" prefWidth="125.0" text="Đã tham dự" />
-          <TableColumn fx:id="lock" prefWidth="62.0" text="Chặn" />
+          <TableColumn fx:id="lock" prefWidth="65.0" text="Chặn" />
         </columns>
       </TableView>
       <Label fx:id="total" layoutX="1125.0" layoutY="63.0" text="Tổng số: 100" textFill="#ff9900">

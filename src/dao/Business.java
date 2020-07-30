@@ -196,6 +196,11 @@ public class Business {
         attendanceDAO.cancelMeeting(userId, meetingId);
     }
     
+    public static void rejectIfOutTime(int userId, int meetingId){
+        AttendanceDAO attendanceDAO=new AttendanceDAO();
+        attendanceDAO.rejectIfOutTime(userId, meetingId);
+    }
+    
     //Function for Location ------------------------------
     public static List<Location> getAllLocation(){
         LocationDAO locationDAO=new LocationDAO();

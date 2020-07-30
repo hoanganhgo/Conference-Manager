@@ -46,7 +46,7 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <Button fx:id="register" layoutX="135.0" layoutY="425.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="140.0" text="Đăng ký" textFill="WHITE">
+      <Button fx:id="register" layoutX="135.0" layoutY="425.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="140.0" text="Đăng ký" textFill="WHITE">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>

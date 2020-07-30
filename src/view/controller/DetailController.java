@@ -127,7 +127,8 @@ public class DetailController implements Initializable {
     private MenuButton admin;
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {     
+    public void initialize(URL url, ResourceBundle rb) {    
+        //Bảng đăng ký tham dự
         number1.setCellValueFactory(new PropertyValueFactory<>("number"));
         fullname1.setCellValueFactory(new PropertyValueFactory<>("name"));
         
@@ -138,6 +139,7 @@ public class DetailController implements Initializable {
         //Căn trái cột tên
         fullname1.setStyle("-fx-alignment: CENTER-LEFT;");
         
+        //Bảng đã được duyệt
         number2.setCellValueFactory(new PropertyValueFactory<>("number"));
         fullname2.setCellValueFactory(new PropertyValueFactory<>("name"));
         
@@ -161,33 +163,58 @@ public class DetailController implements Initializable {
             }
             
             //Kiểm tra đăng nhập
-            if (Business.authenticator==null){
-                Business.alertInformation("Đăng ký tham dự", "Bạn phải đăng nhập để có thể đăng ký tham dự hội nghị.");     
-                
-                //Sự kiện đăng nhập
-                Parent frame=null;
-                FXMLLoader loader=null;
-                try {
-                    loader = new FXMLLoader(getClass().getResource("../frame/SignIn.fxml"));
-                    frame = loader.load();
-                } catch (IOException ex) {
-                    Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                    return;
+            if (Business.authenticator==null){                
+                //Lựa chọn đăng nhập hay đăng ký
+                ButtonType yes = new ButtonType("Đăng nhập", ButtonBar.ButtonData.YES);
+                ButtonType no = new ButtonType("Chưa có tài khoản", ButtonBar.ButtonData.NO);
+                Alert alert=new Alert(Alert.AlertType.INFORMATION, "Bạn phải đăng nhập để có thể đăng ký tham dự hội nghị!", yes, no);
+                alert.setTitle("Đăng nhập/Đăng ký");
+                alert.setHeaderText(null);
+                Optional<ButtonType> option=alert.showAndWait();
+                if (option.orElse(yes)==yes){
+                    //Sự kiện đăng nhập
+                    Parent frame=null;
+                    FXMLLoader loader=null;
+                    try {
+                        loader = new FXMLLoader(getClass().getResource("../frame/SignIn.fxml"));
+                        frame = loader.load();
+                    } catch (IOException ex) {
+                        Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                        return;
+                    }
+            
+                    //Truyền Button cho frame sau
+                    SignInController signInController=loader.getController();            
+                    signInController.transferMessage(signIn, register, label, persional, information, logout, myConference, admin);
+            
+                    //Khởi tạo màn hình đăng ký
+                    Stage signIn=new Stage();
+                    signIn.setTitle("Đăng nhập");
+                    Scene scene=new Scene(frame, 390, 320);
+                    signIn.setScene(scene);
+                    signIn.setResizable(false);
+                    signIn.centerOnScreen();
+            
+                    signIn.show();        
+                }else if (option.orElse(no)==no){
+                    Parent frame=null;
+                    try {
+                        frame = FXMLLoader.load(getClass().getResource("../frame/SignUp.fxml"));
+                    } catch (IOException ex) {
+                        Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                        return;
+                    }
+                        
+                    Stage signUp=new Stage();
+                    signUp.setTitle("Đăng ký");
+                    Scene scene=new Scene(frame, 390, 500);
+                    signUp.setScene(scene);
+                    signUp.setResizable(false);
+                    signUp.centerOnScreen();
+                        
+                    signUp.show();    
                 }
-            
-                //Truyền Button cho frame sau
-                SignInController signInController=loader.getController();            
-                signInController.transferMessage(signIn, register, label, persional, information, logout, myConference, admin);
-            
-                //Khởi tạo màn hình đăng ký
-                Stage signIn=new Stage();
-                signIn.setTitle("Quản lý hội nghị");
-                Scene scene=new Scene(frame, 390, 320);
-                signIn.setScene(scene);
-                signIn.setResizable(false);
-                signIn.centerOnScreen();
-            
-                signIn.show();
+                
                 return;
             }
             
@@ -230,6 +257,41 @@ public class DetailController implements Initializable {
             
             btnDetail.setStyle(null);
             btnRegister.setStyle("-fx-background-color:#ffffff; -fx-border-color:#ff9900");
+            
+            //Tạo danh sách hiển thị người đăng ký tham dự
+            ObservableList<NameModel> list1=FXCollections.observableArrayList();
+            int number=1;        
+            List<String> data1=Business.getUserByMeeting(meetingId, 2);
+            for (String s : data1){
+                list1.add(new NameModel(number++, s));
+            }
+            tbRegister.setItems(list1); 
+            
+            //Tạo danh sách hiển thị người được duyệt
+            ObservableList<NameModel> listAttend=FXCollections.observableArrayList();
+            number=1;
+            List<String> data2=Business.getUserByMeeting(meetingId, 1);
+            for (String s : data2){
+                listAttend.add(new NameModel(number++, s));
+            }
+            tbAttend.setItems(listAttend);
+        });
+        
+        btnBack.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
+            //Xác định màn hình trước đó
+            int previous=Business.previous_screen;
+            if (previous==1){
+                //Home
+                Business.homeStage=Business.back(getClass().getResource("../frame/Home.fxml"), "Trang chủ");
+            }else if (previous==2){
+                //My Conference
+                Business.myConferenceStage=Business.back(getClass().getResource("../frame/MyConference.fxml"), "Hội nghị của tôi");
+            }else if (previous==3){
+                //Manage Conference
+                Business.manageConferenceStage=Business.back(getClass().getResource("../frame/ManageConference.fxml"), "Quản lý hội nghị");
+            }
+                       
+            Business.closeWindow(event);
         });
     }    
     
@@ -275,41 +337,9 @@ public class DetailController implements Initializable {
             this.avatar.setLayoutX(707+x);
         }
         
-        //GridView
-        //Tạo danh sách hiển thị
-        ObservableList<NameModel> list1=FXCollections.observableArrayList();
-        int number=1;        
-        List<String> data1=Business.getUserByMeeting(meetingId, 2);
-        for (String s : data1){
-            list1.add(new NameModel(number++, s));
-        }
-        tbRegister.setItems(list1); 
+
         
-        //Tạo danh sách hiển thị
-        ObservableList<NameModel> listAttend=FXCollections.observableArrayList();
-        number=1;
-        List<String> data2=Business.getUserByMeeting(meetingId, 1);
-        for (String s : data2){
-            listAttend.add(new NameModel(number++, s));
-        }
-        tbAttend.setItems(listAttend);
-        
-        btnBack.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
-            //Xác định màn hình trước đó
-            int previous=Business.previous_screen;
-            if (previous==1){
-                //Home
-                Business.homeStage=Business.back(getClass().getResource("../frame/Home.fxml"), "Trang chủ");
-            }else if (previous==2){
-                //My Conference
-                Business.myConferenceStage=Business.back(getClass().getResource("../frame/MyConference.fxml"), "Hội nghị của tôi");
-            }else if (previous==3){
-                //Manage Conference
-                Business.manageConferenceStage=Business.back(getClass().getResource("../frame/ManageConference.fxml"), "Quản lý hội nghị");
-            }
-                       
-            Business.closeWindow(event);
-        });
+
     }
     
     public void setVisibleRegister(boolean bool){

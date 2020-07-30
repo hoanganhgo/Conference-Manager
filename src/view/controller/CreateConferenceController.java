@@ -165,7 +165,7 @@ public class CreateConferenceController implements Initializable {
         }); 
         
         btnBack.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
-            Business.back(getClass().getResource("../frame/ManageConference.fxml"), "Quản lý hội nghị");
+            Business.manageConferenceStage = Business.back(getClass().getResource("../frame/ManageConference.fxml"), "Quản lý hội nghị");
             Business.closeWindow(event);
         });
     }    
@@ -246,7 +246,7 @@ public class CreateConferenceController implements Initializable {
             Business.alertInformation("Tạo hội nghị", "Tạo hội nghị thành công!");
             
             //Đóng cửa sổ
-            Business.back(getClass().getResource("../frame/ManageConference.fxml"), "Quản lý hội nghị");
+            Business.manageConferenceStage = Business.back(getClass().getResource("../frame/ManageConference.fxml"), "Quản lý hội nghị");
             Business.closeWindow(event);
         });   
     }
