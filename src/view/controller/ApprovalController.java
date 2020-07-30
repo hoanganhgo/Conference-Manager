@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import view.model.ManageMeetingModel;
 import view.model.UserModel;
 
@@ -52,6 +53,9 @@ public class ApprovalController implements Initializable {
     
     @FXML
     private Label size;
+    
+    @FXML
+    private Button btnBack;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -74,11 +78,15 @@ public class ApprovalController implements Initializable {
         fullname.setStyle("-fx-alignment: CENTER-LEFT;");
         username.setStyle("-fx-alignment: CENTER-LEFT;");
         email.setStyle("-fx-alignment: CENTER-LEFT;");        
+        
+        btnBack.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
+            Business.closeWindow(event);
+        });
     }    
     
     public void transferData(int meetingId, String name,int size){        
         int[] participants=new int[1];
-        participants[0]=Business.countParticipanted(meetingId);
+        participants[0]=Business.countParticipants(meetingId, 1);
 
         //Lấy danh sách hội nghị
         List<Object[]> attendances = Business.getUserJoinAttendance(meetingId);

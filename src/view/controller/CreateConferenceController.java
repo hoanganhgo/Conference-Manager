@@ -165,15 +165,13 @@ public class CreateConferenceController implements Initializable {
         }); 
         
         btnBack.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
-            back();
-            //Đóng cửa sổ
-            ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+            Business.back(getClass().getResource("../frame/ManageConference.fxml"), "Quản lý hội nghị");
+            Business.closeWindow(event);
         });
     }    
     
     public void initEventCreate(){
         create.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
-            System.out.println("Create");
 
             //Kiểm tra hợp lệ
             if (name.getText().isEmpty()){
@@ -201,6 +199,15 @@ public class CreateConferenceController implements Initializable {
                 return;
             }
             
+            if (hourInt<0 || hourInt>23){
+                Business.alertError("Tạo hội nghị", "Giờ không hợp lệ");
+                return;
+            }
+            if (minuteInt<0 || minuteInt>59){
+                Business.alertError("Tạo hội nghị", "Phút không hợp lệ");
+                return;
+            }
+            
             if (shortDescription.getText().isEmpty()){
                 Business.alertError("Tạo hội nghị", "Miêu tả ngắn không được bỏ trống");
                 return;
@@ -215,14 +222,23 @@ public class CreateConferenceController implements Initializable {
                 Business.alertError("Tạo hội nghị", "Bạn chưa chọn hình đại diện");
                 return;
             }
-            
+                      
             //Khởi tạo đối tượng thời gian
             LocalDate a = datePicker.getValue();
-            Date date=new Date(a.getYear()-1900, a.getMonthValue(), a.getDayOfMonth(), hourInt, minuteInt);
+            Date date=new Date(a.getYear()-1900, a.getMonthValue()-1, a.getDayOfMonth(), hourInt, minuteInt);
             
-            //Khởi tạo đối tượng vị trí
-            Location location=new Location();
-            location.setLocationId(1);
+            //Ngày được chọn phải lớn hơn ngày hiện tại
+            if ((new Date()).compareTo(date)>=0){
+                Business.alertError("Tạo hội nghị", "Ngày được chọn phải lớn hơn ngày hiện tại.");
+                return;
+            }
+            
+            //Kiểm tra địa điểm có ai sử dụng chưa
+            if (Business.isLocationUsed(choice.getLocationId(), date)){
+                Business.alertError("Tạo hội nghị", "Thời gian và địa điểm bạn dự định tạo hội nghị đã có người sử dụng. Vui lòng chọn thời gian hoặc địa điểm khác!");
+                return;
+            }
+            
             Meeting meeting = new Meeting(choice, name.getText(), shortDescription.getText(), longDescription.getText(), imageString, date);
             Business.createConference(meeting);
             
@@ -230,15 +246,13 @@ public class CreateConferenceController implements Initializable {
             Business.alertInformation("Tạo hội nghị", "Tạo hội nghị thành công!");
             
             //Đóng cửa sổ
-            ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
-            back();
+            Business.back(getClass().getResource("../frame/ManageConference.fxml"), "Quản lý hội nghị");
+            Business.closeWindow(event);
         });   
     }
     
     public void initEventUpdate(int meetingId){
         this.create.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
-            System.out.println("Update");
-            
             //Kiểm tra hợp lệ
             if (name.getText().isEmpty()){
                 Business.alertError("Cập nhật hội nghị", "Tên hội nghị không được bỏ trống");
@@ -265,6 +279,15 @@ public class CreateConferenceController implements Initializable {
                 return;
             }
             
+            if (hourInt<0 || hourInt>23){
+                Business.alertError("Tạo hội nghị", "Giờ không hợp lệ");
+                return;
+            }
+            if (minuteInt<0 || minuteInt>59){
+                Business.alertError("Tạo hội nghị", "Phút không hợp lệ");
+                return;
+            }
+            
             if (shortDescription.getText().isEmpty()){
                 Business.alertError("Cập nhật hội nghị", "Miêu tả ngắn không được bỏ trống");
                 return;
@@ -282,11 +305,14 @@ public class CreateConferenceController implements Initializable {
             
             //Khởi tạo đối tượng thời gian
             LocalDate a = datePicker.getValue();
-            Date date=new Date(a.getYear()-1900, a.getMonthValue(), a.getDayOfMonth(), hourInt, minuteInt);
+            Date date=new Date(a.getYear()-1900, a.getMonthValue()-1, a.getDayOfMonth(), hourInt, minuteInt);
             
-            //Khởi tạo đối tượng vị trí
-            Location location=new Location();
-            location.setLocationId(1);
+            //Ngày được chọn phải lớn hơn ngày hiện tại
+            if ((new Date()).compareTo(date)>=0){
+                Business.alertError("Tạo hội nghị", "Ngày được chọn phải lớn hơn ngày hiện tại.");
+                return;
+            }
+            
             Meeting meeting = new Meeting(meetingId, choice, name.getText(), shortDescription.getText(), longDescription.getText(), imageString, date);
             Business.updateConference(meeting);
             
@@ -294,8 +320,8 @@ public class CreateConferenceController implements Initializable {
             Business.alertInformation("Cập nhật hội nghị", "Cập nhật nghị thành công!");
             
             //Đóng cửa sổ
-            ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
-            back();
+            Business.manageConferenceStage = Business.back(getClass().getResource("../frame/ManageConference.fxml"), "Quản lý hội nghị");
+            Business.closeWindow(event);
         });
     }
     
@@ -312,40 +338,21 @@ public class CreateConferenceController implements Initializable {
         this.shortDescription.setText(shortDescription);
         this.longDescription.setText(longDescription);
         
-        this.imageString=avatar;
         File imageFile=new File(avatar.replace((char)92, (char)47));
-        Image image=new Image(imageFile.toURI().toString());       
-        this.image.setImage(image);
-        
-        this.create.setText("Cập Nhật");
-        
-        //Căn chỉ vị trí
-        double scale=image.getHeight()/252;
-        double width=image.getWidth()/scale;
-        double height=image.getHeight()/scale;
-        double x=(514-width)/2;
-        this.image.setLayoutX(740+x);
-    }
-    
-    private void back(){
-        Parent frame=null;
-        FXMLLoader loader=null;
-        try {
-            loader = new FXMLLoader(getClass().getResource("../frame/ManageConference.fxml"));
-            frame = loader.load();
-        } catch (IOException ex) {
-            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-            return;
+        if (imageFile.exists()){
+            this.imageString=avatar;
+            Image image=new Image(imageFile.toURI().toString());       
+            this.image.setImage(image);
+            //Căn chỉ vị trí
+            double scale=image.getHeight()/252;
+            double width=image.getWidth()/scale;
+            double height=image.getHeight()/scale;
+            double x=(514-width)/2;
+            this.image.setLayoutX(740+x);
+        }else{
+            this.imageString=null;
         }
-            
-        Stage conference=new Stage();
-        conference.setTitle("Quản lý hội nghị");
-        Scene scene=new Scene(frame, 1280, 700);
-        conference.setScene(scene);
-        conference.setResizable(false);
-        conference.centerOnScreen();
-            
-        conference.show();
+       
+        this.create.setText("Cập Nhật");       
     }
-    
 }

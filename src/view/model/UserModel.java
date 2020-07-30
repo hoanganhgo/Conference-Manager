@@ -54,10 +54,10 @@ public class UserModel {
             total.setText("Tổng số: "+(num[0]-1));
             
             //Nếu đã đủ người
-            if (participants[0]==size){
-                //Tất cả các yêu cầu còn lại điều bị từ chối
-                Business.rejectAll(meetingId);
-            }
+//            if (participants[0]==size){
+//                //Tất cả các yêu cầu còn lại điều bị từ chối
+//                Business.rejectAll(meetingId);
+//            }
         });
         
         this.noApproval.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{

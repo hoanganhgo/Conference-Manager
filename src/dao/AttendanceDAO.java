@@ -12,26 +12,15 @@ import org.hibernate.Transaction;
 public class AttendanceDAO {
     Session session=null;
     
-    //Đếm số người đăng ký tham dự
-    public Integer countParticipants(Integer meetingID)
+    //Đếm số người đăng ký tham dự (0: từ chối, 1: được duyệt, 2: đang chờ)
+    public Integer countParticipants(Integer meetingID, int status)
     {
         this.session=HibernateUtil.getSessionFactory().openSession();
         Transaction tx=session.beginTransaction();
-        String hql="Select count(*) From "+Attendance.class.getName()+" e where e.meeting.meetingId=:meetingID";
+        String hql="Select count(*) From "+Attendance.class.getName()+" e where e.meeting.meetingId=:meetingID and e.status=:status";
         Query query=session.createQuery(hql);
         query.setParameter("meetingID", meetingID);
-        Object list=query.uniqueResult();
-        return Integer.valueOf(list.toString());
-    }
-    
-    //Đếm số người đã tham dự
-    public Integer countParticipanted(Integer meetingID)
-    {
-        this.session=HibernateUtil.getSessionFactory().openSession();
-        Transaction tx=session.beginTransaction();
-        String hql="Select count(*) From "+Attendance.class.getName()+" e where e.meeting.meetingId=:meetingID and e.status=1";
-        Query query=session.createQuery(hql);
-        query.setParameter("meetingID", meetingID);
+        query.setParameter("status", status);
         Object list=query.uniqueResult();
         return Integer.valueOf(list.toString());
     }
@@ -96,7 +85,7 @@ public class AttendanceDAO {
     public void rejectAll(int meetingId){
         this.session=HibernateUtil.getSessionFactory().openSession();
         Transaction tx=session.beginTransaction();
-        String hql="Update "+Attendance.class.getName()+" e set e.status=0 Where e.meeting.meetingId=:meetingId";
+        String hql="Update "+Attendance.class.getName()+" e set e.status=0 Where e.meeting.meetingId=:meetingId and e.status=2";
         Query query=session.createQuery(hql);
         query.setParameter("meetingId", meetingId);
         query.executeUpdate();
@@ -117,7 +106,7 @@ public class AttendanceDAO {
     }
     
     //Hủy tất cả các hội nghị chưa diễn ra đã tham gia.
-    public void cancelIfLocked(int userId){
+    public void rejectIfLocked(int userId){
         this.session=HibernateUtil.getSessionFactory().openSession();
         Transaction tx=session.beginTransaction();
         String hql="Update "+Attendance.class.getName()+" e set e.status=0 Where e.user.userId=:userId and e.meeting.meetingId IN ( Select m.meetingId From "+
@@ -126,6 +115,20 @@ public class AttendanceDAO {
         query.setParameter("userId", userId);
         Date date=new Date();        
         query.setParameter("time", date);
+        query.executeUpdate();
+        session.getTransaction().commit();
+        session.close();
+    }
+    
+    //Hủy đăng ký tham dự hội nghị
+    public void cancelMeeting(int userId, int meetingId)
+    {
+        this.session=HibernateUtil.getSessionFactory().openSession();
+        Transaction tx=session.beginTransaction();
+        String hql="Delete From "+Attendance.class.getName()+" e Where e.meeting.meetingId=:meetingId and e.user.userId=:userId";
+        Query query=session.createQuery(hql);
+        query.setParameter("meetingId", meetingId);
+        query.setParameter("userId", userId);
         query.executeUpdate();
         session.getTransaction().commit();
         session.close();

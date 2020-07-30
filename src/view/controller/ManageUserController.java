@@ -58,6 +58,9 @@ public class ManageUserController implements Initializable {
     private Label total;
     
     @FXML
+    private Button btnBack;
+    
+    @FXML
     private MenuButton sort;
     
     @FXML
@@ -310,6 +313,11 @@ public class ManageUserController implements Initializable {
             tbData.setItems(list);
             filter.setText("Tất cả");
             sort.setText("Sắp xếp");
+        });
+        
+        btnBack.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
+            Business.homeStage = Business.back(getClass().getResource("../frame/Home.fxml"), "Trang chủ");
+            Business.closeWindow(event);
         });
     }    
     

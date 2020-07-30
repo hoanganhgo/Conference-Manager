@@ -29,7 +29,6 @@ public class ManageMeetingModel {
     private Date date;
     private String time;
     private Button requirement;
-    private Button attended;
     private Button edit;
 
     public ManageMeetingModel(int id, int number, String name, Date date, Integer size) {
@@ -39,7 +38,6 @@ public class ManageMeetingModel {
         this.date = date;
         this.time = Business.formatDateTime(date);
         this.requirement = new Button("Hiển thị");
-        this.attended = new Button("Hiển thị");
         Image image=new Image("./././images/edit.png");
         ImageView imageView=new ImageView(image);
         imageView.setFitHeight(20);
@@ -47,7 +45,12 @@ public class ManageMeetingModel {
         this.edit = new Button();
         this.edit.setGraphic(imageView);
         
-        this.requirement.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
+        if (Business.countParticipants(id, 1)>=size){
+            this.requirement.setText("Đã đủ người");
+        }else if ((new Date()).compareTo(date)>=0){
+            this.requirement.setText("Đã diễn ra");
+        }else{
+            this.requirement.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
             //Load frame
             Parent frame=null;
             FXMLLoader loader=null;
@@ -72,7 +75,9 @@ public class ManageMeetingModel {
             users.centerOnScreen();
                 
             users.show();
-        });
+            });
+        }
+          
         
         this.edit.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
             Parent frame=null;
@@ -154,14 +159,6 @@ public class ManageMeetingModel {
 
     public void setRequirement(Button requirement) {
         this.requirement = requirement;
-    }
-
-    public Button getAttended() {
-        return attended;
-    }
-
-    public void setAttended(Button attended) {
-        this.attended = attended;
     }
 
     public Button getEdit() {

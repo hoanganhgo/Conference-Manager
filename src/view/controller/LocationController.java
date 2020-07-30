@@ -48,6 +48,9 @@ public class LocationController implements Initializable {
     public TableColumn<LocationModel, Button> choose;
     
     @FXML
+    private Button btnBack;
+    
+    @FXML
     private Button addLocation; 
     
     @FXML
@@ -76,6 +79,7 @@ public class LocationController implements Initializable {
         
         //Căn trái cột tên hội nghị
         name.setStyle("-fx-alignment: CENTER-LEFT;");
+        address.setStyle("-fx-alignment: CENTER-LEFT;");
         
         //Lấy tất cả địa điểm
         List<Location> data=Business.getAllLocation();
@@ -145,6 +149,10 @@ public class LocationController implements Initializable {
             addLocation.centerOnScreen();
             
             addLocation.show();
+        });
+        
+        btnBack.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
+            Business.closeWindow(event);
         });
     }    
     

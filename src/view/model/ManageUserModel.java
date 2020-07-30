@@ -50,7 +50,7 @@ public class ManageUserModel {
                imageView.setImage(lock);
                this.active=0;
                Business.setActiveUser(id, false);
-               Business.cancelIfLocked(id);
+               Business.rejectIfLocked(id);
             }else{
                imageView.setImage(unlock);
                this.active=1;

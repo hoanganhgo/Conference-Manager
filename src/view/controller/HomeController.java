@@ -2,6 +2,8 @@ package view.controller;
 
 import dao.Business;
 import entity.Location;
+import entity.User;
+import java.io.File;
 import java.io.IOException;
 import javafx.scene.control.Button;
 import java.net.URL;
@@ -18,16 +20,26 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import view.model.MeetingModel;
 
@@ -54,6 +66,9 @@ public class HomeController implements Initializable {
     
     @FXML
     private TableColumn<MeetingModel, Button> description;
+    
+    @FXML
+    private GridPane gridPane;
     
     @FXML
     private Label label;
@@ -97,10 +112,37 @@ public class HomeController implements Initializable {
     @FXML
     private MenuItem searchDescription;    //type=3
     
+    @FXML
+    private ScrollPane gridScrollPane;
+    
+    @FXML
+    private MenuButton viewStyle;
+    
+    @FXML
+    private MenuItem tableStyle;
+    
+    @FXML
+    private MenuItem gridStyle;
+    
     private int searchType=1;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        //Xác minh đăng nhập
+        User user = Business.authenticator; 
+        if (user!=null){
+            //Xử lý sau khi đăng nhập
+            login.setVisible(false);
+            register.setVisible(false);
+            label.setVisible(false);
+                
+            persional.setVisible(true);
+            persional.setText("Xin chào! "+Business.detachName(user.getName()));
+            myConference.setVisible(true);
+            if (user.getAdmin()==1){
+                admin.setVisible(true);
+            }
+        }
         number.setCellValueFactory(new PropertyValueFactory<>("number"));
         name.setCellValueFactory(new PropertyValueFactory<>("name"));
         time.setCellValueFactory(new PropertyValueFactory<>("time"));
@@ -117,7 +159,6 @@ public class HomeController implements Initializable {
         //Căn trái cột tên hội nghị
         name.setStyle("-fx-alignment: CENTER-LEFT;");
         
-        
         //Lấy danh sách hội nghị
         List<Object[]> meetings = Business.getAllMeetings();
        
@@ -129,7 +170,7 @@ public class HomeController implements Initializable {
         {
             //Kiểm tra tình trạng hội nghị
             Integer size=((Location)e[4]).getSize();
-            Integer participants=Business.countParticipants((int)e[0]);
+            Integer participants=Business.countParticipants((int)e[0], 1);
 
             String status = Business.checkStatus(participants, size, (Date)e[2]);
             
@@ -142,9 +183,6 @@ public class HomeController implements Initializable {
             if (event.getClickCount()>=2){
                 //Lấy dữ liệu hội nghị
                 MeetingModel data=tbData.getSelectionModel().getSelectedItem();
-                
-                //Lấy vị trí được double click
-                Integer pos=data.getNumber()-1;
                                
                 //Lấy dữ liệu miêu tả và hình ảnh
                 Object[] objects=Business.getMeetingDetail(data.getId());
@@ -172,6 +210,7 @@ public class HomeController implements Initializable {
                 DetailController detailController= loader.getController();
                 detailController.transferMessage(data.getId(), data.getName(), data.getDateTime(), location, size, data.getDescriptionContent(), longDescription, avatar);
                 detailController.transferButton(login, register, label, persional, information, logout, myConference, admin);
+                Business.previous_screen=1;
                 
                 //Khởi tạo frame
                 Stage detail=new Stage();
@@ -183,11 +222,96 @@ public class HomeController implements Initializable {
                 detail.centerOnScreen();
                 
                 detail.show();
+                Business.homeStage.close();
             }
         });
         
-        tbData.setItems(list);   
+        tbData.setItems(list); 
         
+        //GridView
+        List<Object[]> dataGrid=Business.getMeetingForGirdPane();
+        int length=dataGrid.size();
+        
+        for (int i=0;i<length;i++){
+            final int id=(int)dataGrid.get(i)[0];
+            String avatar=String.valueOf(dataGrid.get(i)[1]);
+            String name=String.valueOf(dataGrid.get(i)[2]);
+            Date time=(Date)(dataGrid.get(i)[3]);
+            String shortDescription=String.valueOf(dataGrid.get(i)[4]);
+                                    
+            File imageFile=new File(avatar.replace((char)92, (char)47));
+            ImageView imageView=new ImageView();
+            if (imageFile.exists()){
+                Image image=new Image(imageFile.toURI().toString());
+            
+                imageView.setImage(image);
+                imageView.setFitHeight(170);
+                imageView.setFitWidth(260);
+            }
+
+            
+            Label nameText=new Label(name);
+            nameText.setFont(new Font("",22));
+            
+            String timeString=Business.formatDateTime(time);
+            Label timeText=new Label(timeString);
+            timeText.setFont(new Font("", 18));
+            
+            Button button = new Button("Xem Chi Tiết");
+            button.setFont(new Font("", 18));
+            button.addEventHandler((MouseEvent.MOUSE_CLICKED), (MouseEvent event)->{                              
+                //Lấy dữ liệu miêu tả và hình ảnh
+                Object[] objects=Business.getMeetingDetail(id);
+                Location ln=(Location)objects[0];
+                String longDescription=objects[1].toString();
+                String avatarString=objects[2].toString();
+                
+                //Tạo chuỗi địa điểm
+                String location=ln.getName()+", "+ln.getAdress();
+                
+                //Lấy kích thước hội nghị
+                int size=ln.getSize();
+                
+                //Load frame
+                Parent frame=null;
+                FXMLLoader loader=null;
+                try {
+                    loader=new FXMLLoader(getClass().getResource("../frame/Detail.fxml"));
+                    frame = loader.load();
+                } catch (IOException ex) {
+                    Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                //Truyền dữ liệu cho frame detail
+                DetailController detailController= loader.getController();
+                detailController.transferMessage(id, name, time, location, size, shortDescription, longDescription, avatar);
+                detailController.transferButton(login, register, label, persional, information, logout, myConference, admin);
+                Business.previous_screen=1;
+                
+                //Khởi tạo frame
+                Stage detail=new Stage();
+                detail.setTitle("Chi tiết hội nghị");
+                
+                Scene scene=new Scene(frame, 1280,700);
+                detail.setScene(scene);
+                detail.setResizable(false);
+                detail.centerOnScreen();
+                
+                detail.show();   
+                Business.closeWindow(event);
+            });
+            
+            VBox box=new VBox();
+            box.setAlignment(Pos.CENTER);
+            box.setPadding(new Insets(20,80,20,20));
+            box.getChildren().add(imageView);
+            box.getChildren().add(nameText);
+            box.getChildren().add(timeText);
+            box.getChildren().add(button);
+            gridPane.add(box,i%3,i/3);
+        }   
+        
+               
         //Cài đặt sự kiện tìm kiếm
         search.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
             search.setStyle("-fx-background-color: #ff9900;");
@@ -205,7 +329,7 @@ public class HomeController implements Initializable {
                         if (name.contains(content)){
                             //Kiểm tra tình trạng hội nghị
                             Integer size=((Location)e[4]).getSize();
-                            Integer participants=Business.countParticipants((int)e[0]);
+                            Integer participants=Business.countParticipants((int)e[0], 1);
                             String status = Business.checkStatus(participants, size, (Date)e[2]);
             
                             //Thêm hội nghị vào giao diện
@@ -220,7 +344,7 @@ public class HomeController implements Initializable {
                         if (location.contains(content)){
                             //Kiểm tra tình trạng hội nghị
                             Integer size=((Location)e[4]).getSize();
-                            Integer participants=Business.countParticipants((int)e[0]);
+                            Integer participants=Business.countParticipants((int)e[0], 1);
                             String status = Business.checkStatus(participants, size, (Date)e[2]);
             
                             //Thêm hội nghị vào giao diện
@@ -235,7 +359,7 @@ public class HomeController implements Initializable {
                         if (description.contains(content)){
                             //Kiểm tra tình trạng hội nghị
                             Integer size=((Location)e[4]).getSize();
-                            Integer participants=Business.countParticipants((int)e[0]);
+                            Integer participants=Business.countParticipants((int)e[0], 1);
                             String status = Business.checkStatus(participants, size, (Date)e[2]);
             
                             //Thêm hội nghị vào giao diện
@@ -376,10 +500,12 @@ public class HomeController implements Initializable {
             conference.setScene(scene);
             conference.setResizable(false);
             conference.centerOnScreen();
+            Business.myConferenceStage=conference;
             
             conference.show();
             
             myConference.setStyle("-fx-background-color: #ff9900;");
+            Business.closeWindow(event);
         });
         
         myConference.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event)->{
@@ -404,8 +530,10 @@ public class HomeController implements Initializable {
             conference.setScene(scene);
             conference.setResizable(false);
             conference.centerOnScreen();
+            Business.manageConferenceStage=conference;
             
             conference.show();
+            Business.homeStage.close();
         });
         
         //Sự kiện click manage Users
@@ -430,6 +558,7 @@ public class HomeController implements Initializable {
                userScreen.centerOnScreen();
             
                userScreen.show();
+               Business.homeStage.close();
             }
         });
         
@@ -460,5 +589,39 @@ public class HomeController implements Initializable {
                 searchBox.setPromptText("Tìm kiếm theo mô tả");
             }
         });
-    }  
+        
+        tableStyle.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                gridScrollPane.setVisible(false);
+                
+                searchFilter.setDisable(false);
+                searchBox.setDisable(false);
+                search.setDisable(false);
+                
+                tbData.setVisible(true);
+                if (Business.authenticator==null){
+                    label.setVisible(true);   
+                }
+                
+                viewStyle.setText("Dạng bảng");
+            }
+        });
+        
+        gridStyle.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                tbData.setVisible(false);
+                label.setVisible(false);
+                
+                searchFilter.setDisable(true);
+                searchBox.setDisable(true);
+                search.setDisable(true);
+                
+                gridScrollPane.setVisible(true);
+                
+                viewStyle.setText("Dạng lưới");
+            }
+        });
+    }
 }

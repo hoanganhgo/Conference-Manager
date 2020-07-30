@@ -49,9 +49,6 @@ public class ManageConferenceController implements Initializable {
     public TableColumn<ManageMeetingModel, Button> requirement;
     
     @FXML
-    public TableColumn<ManageMeetingModel, Button> attended;
-    
-    @FXML
     public TableColumn<ManageMeetingModel, Button> edit;
     
     @FXML
@@ -59,6 +56,9 @@ public class ManageConferenceController implements Initializable {
     
     @FXML
     private Button search;
+    
+    @FXML
+    private Button btnBack;
     
     @FXML
     private TextField searchBox;
@@ -86,7 +86,6 @@ public class ManageConferenceController implements Initializable {
         name.setCellValueFactory(new PropertyValueFactory<>("name"));
         time.setCellValueFactory(new PropertyValueFactory<>("time"));
         requirement.setCellValueFactory(new PropertyValueFactory<>("requirement"));
-        attended.setCellValueFactory(new PropertyValueFactory<>("attended"));
         edit.setCellValueFactory(new PropertyValueFactory<>("edit"));
        
         //Vô hiệu hóa sorting ở các cột
@@ -143,6 +142,7 @@ public class ManageConferenceController implements Initializable {
                 DetailController detailController= loader.getController();
                 detailController.transferMessage(data.getId(), data.getName(), data.getDate(), location, size, Business.getShortDescription(data.getId(), meetings), longDescription, avatar);
                 detailController.setVisibleRegister(false);
+                Business.previous_screen=3;
                 
                 //Khởi tạo frame
                 Stage detail=new Stage();
@@ -154,6 +154,7 @@ public class ManageConferenceController implements Initializable {
                 detail.centerOnScreen();
                 
                 detail.show();
+                Business.manageConferenceStage.close();
             }
         });
         
@@ -236,9 +237,9 @@ public class ManageConferenceController implements Initializable {
             screenCreate.centerOnScreen();
                         
             screenCreate.show();
-
-            
+           
             createConference.setStyle("-fx-background-color: #ff9900;");
+            Business.closeWindow(event);
         });
         
         createConference.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event)->{
@@ -271,6 +272,11 @@ public class ManageConferenceController implements Initializable {
                 searchFilter.setText("Mô tả");
                 searchBox.setPromptText("Tìm kiếm theo mô tả");
             }
+        });
+        
+        btnBack.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
+            Business.homeStage = Business.back(getClass().getResource("../frame/Home.fxml"), "Trang chủ");
+            Business.closeWindow(event);
         });
     }    
     

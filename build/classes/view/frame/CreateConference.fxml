@@ -143,9 +143,9 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <Button fx:id="btnBack" layoutX="6.0" layoutY="4.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="143.0" style="-fx-background-color: #ffffff; -fx-background-radius: 60; -fx-border-radius: 60;" text="Trở Về">
+      <Button fx:id="btnBack" mnemonicParsing="false" prefHeight="53.0" prefWidth="143.0" style="-fx-background-color: #ffffff; -fx-background-radius: 60; -fx-border-radius: 60;" text="Trở Về">
          <graphic>
-            <ImageView fitHeight="58.0" fitWidth="73.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="43.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../images/back.png" />
                </image>

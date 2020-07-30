@@ -4,20 +4,40 @@ import entity.User;
 import entity.Meeting;
 import entity.Attendance;
 import entity.Location;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+import javafx.stage.Window;
+import view.controller.HomeController;
 import view.model.MeetingModel;
 
 public class Business {    
     public static User authenticator=null;    
+    public static Stage homeStage=null;
+    public static Stage myConferenceStage=null;
+    public static Stage manageConferenceStage=null;
+    public static int previous_screen=0;
     //Function for User ------------------------
     public static List<User> getAllUsers()
     {
@@ -68,6 +88,20 @@ public class Business {
         userDAO.setActiveUser(userId, activeInt);
     }
     
+    public static List<String> getUserByMeeting(int meetingId, int status)
+    {
+        UserDAO userDAO=new UserDAO();
+        List<Object[]> list=userDAO.getUserByMeeting(meetingId, status);
+        List<String> result=new LinkedList<>();
+        
+        for (int i=0;i<list.size();i++)
+        {
+            result.add(String.valueOf(list.get(i)));
+        }
+        
+        return result;
+    }
+    
     //Function for Meeting -----------------------
     public static List<Object[]> getAllMeetings(){
         MeetingDAO meetingDAO=new MeetingDAO();
@@ -102,18 +136,22 @@ public class Business {
         meetingDAO.updateConference(meeting);
     }
     
-    
-    //Function for Attendane ----------------------------
-    public static Integer countParticipants(Integer meetingID)
+    public static List<Object[]> getMeetingForGirdPane()
     {
-        AttendanceDAO attendanceDAO=new AttendanceDAO();
-        return attendanceDAO.countParticipants(meetingID);
+        MeetingDAO meetingDAO=new MeetingDAO();
+        return meetingDAO.getMeetingForGirdPane();
     }
     
-    public static Integer countParticipanted(Integer meetingID)
+    public static boolean isLocationUsed(int locationId, Date date){
+        MeetingDAO meetingDAO=new MeetingDAO();
+        return meetingDAO.isLocationUsed(locationId, date);
+    }
+    
+    //Function for Attendane ----------------------------
+    public static Integer countParticipants(Integer meetingID, int status)
     {
         AttendanceDAO attendanceDAO=new AttendanceDAO();
-        return attendanceDAO.countParticipanted(meetingID);
+        return attendanceDAO.countParticipants(meetingID, status);
     }
     
     public static void attendConference(int meetingId, int userId)
@@ -148,9 +186,14 @@ public class Business {
         return attendanceDAO.countConference(userId);
     }
     
-    public static void cancelIfLocked(int userId){
+    public static void rejectIfLocked(int userId){
         AttendanceDAO attendanceDAO=new AttendanceDAO();
-        attendanceDAO.cancelIfLocked(userId);
+        attendanceDAO.rejectIfLocked(userId);
+    }
+    
+    public static void cancelMeeting(int userId, int meetingId){
+        AttendanceDAO attendanceDAO=new AttendanceDAO();
+        attendanceDAO.cancelMeeting(userId, meetingId);
     }
     
     //Function for Location ------------------------------
@@ -386,4 +429,28 @@ public class Business {
         return null;
     }
     
+    public static Stage back(URL url, String title){
+        Parent frame=null;
+        try {
+            frame = FXMLLoader.load(url);
+        } catch (IOException ex) {
+            Logger.getLogger(url.getClass().getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+            
+        Stage screen=new Stage();
+        screen.setTitle(title);
+        Scene scene=new Scene(frame, 1280, 700);
+        screen.setScene(scene);
+        screen.setResizable(false);
+        screen.centerOnScreen();
+            
+        screen.show();
+        return screen;
+    }
+    
+    public static void closeWindow(Event event)
+    {
+        ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+    }
 }

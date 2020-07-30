@@ -2,6 +2,7 @@ package dao;
 
 import entity.Attendance;
 import entity.Meeting;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -82,4 +83,40 @@ public class MeetingDAO {
         session.close();
         return list.get(0);
     }
+    
+    //Lấy dữ liệu cho girdpane
+    public List<Object[]> getMeetingForGirdPane()
+    {
+        this.session=HibernateUtil.getSessionFactory().openSession();
+        Transaction tx=session.beginTransaction();
+        String hql="Select e.meetingId, e.avatar, e.name, e.time, e.shortDescription From "+Meeting.class.getName()+" e";
+        Query query=session.createQuery(hql);
+        List<Object[]> list=query.list();
+        session.close();
+        return list;
+    }
+    
+    //Kiểm tra địa điểm đã có người sử dụng chưa?
+    public boolean isLocationUsed(int locationId, Date date)
+    {
+        this.session=HibernateUtil.getSessionFactory().openSession();
+        Transaction tx=session.beginTransaction();
+        String hql="From "+Meeting.class.getName()+" e Where e.location.locationId=:locationId and e.time between :low and :high";
+        Query query=session.createQuery(hql);
+        query.setParameter("locationId", locationId);
+        Date low=new Date(date.getTime()-28800000);
+        Date high=new Date(date.getTime()+28800000);
+        System.out.println("date="+date);
+        System.out.println(low);
+        System.out.println(high);
+        query.setParameter("low", low);
+        query.setParameter("high", high);
+        List<Object[]> list=query.list();
+        session.close();
+        if (list.isEmpty()){
+            return false;
+        }
+        return true;
+    }
+    
 }

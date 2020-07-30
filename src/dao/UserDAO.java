@@ -1,5 +1,6 @@
 package dao;
 
+import entity.Attendance;
 import entity.User;
 import java.util.List;
 import org.hibernate.Query;
@@ -138,5 +139,19 @@ public class UserDAO {
         query.executeUpdate();
         session.getTransaction().commit();
         session.close();
+    }
+    
+    public List<Object[]> getUserByMeeting(int meetingId, int status)
+    {
+        this.session=HibernateUtil.getSessionFactory().openSession();
+        Transaction tx=session.beginTransaction();
+        String hql="Select u.name From "+Attendance.class.getName()+" a, "
+                +User.class.getName()+" u Where a.user.userId=u.userId and a.status = :status and a.meeting.meetingId=:meetingId";
+        Query query=session.createQuery(hql);
+        query.setParameter("status", status);
+        query.setParameter("meetingId", meetingId);
+        List<Object[]> list=query.list();
+        session.close();
+        return list;
     }
 }

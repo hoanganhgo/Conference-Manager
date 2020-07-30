@@ -8,8 +8,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="400.0" stylesheets="@../style/style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="view.controller.SignUpController">
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="400.0" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controller.SignUpController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff9900" height="68.0" stroke="BLACK" strokeType="INSIDE" width="400.0" />
       <Label layoutX="135.0" layoutY="8.0" text="Đăng ký" textFill="WHITE">
@@ -47,7 +46,7 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <Button fx:id="register" layoutX="142.0" layoutY="437.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="116.0" text="Đăng ký" textFill="WHITE">
+      <Button fx:id="register" layoutX="135.0" layoutY="425.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="140.0" text="Đăng ký" textFill="WHITE">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>

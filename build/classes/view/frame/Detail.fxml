@@ -2,7 +2,10 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
@@ -20,67 +23,135 @@
             <Font name="System Bold" size="20.0" />
          </font>
       </Button>
-      <Label layoutX="41.0" layoutY="89.0" text="Thời gian:">
+      <Button fx:id="btnDetail" layoutX="19.0" layoutY="52.0" mnemonicParsing="false" style="-fx-background-color: #ffffff; -fx-border-color: #ff9900;" text="Chi tiết hội nghị">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="608.0" layoutX="18.0" layoutY="84.0" stroke="#ff9900" strokeType="INSIDE" width="1245.0" />
+      <Button fx:id="btnRegister" layoutX="146.0" layoutY="52.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="225.0" text="Danh sách đăng ký/tham gia">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <AnchorPane fx:id="detail" layoutX="19.0" layoutY="84.0" prefHeight="608.0" prefWidth="1245.0">
+         <children>
+            <Label layoutX="13.0" layoutY="7.0" text="Thời gian:">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="time" layoutX="129.0" layoutY="7.0" text="7:00 - 01/07/2020">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="15.0" layoutY="39.0" text="Địa điểm:">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="15.0" layoutY="144.0" text="Đang chờ duyệt:">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="waiting" layoutX="178.0" layoutY="144.0" text="25 người">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="15.0" layoutY="114.0" text="Số người tối đa:">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="size" layoutX="178.0" layoutY="114.0" text="50 người">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="15.0" layoutY="181.0" text="Mô tả:">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="14.0" layoutY="289.0" text="Mô tả chi tiết:">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <TextArea fx:id="longDescription" editable="false" layoutX="14.0" layoutY="318.0" prefHeight="276.0" prefWidth="1211.0" wrapText="true">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </TextArea>
+            <TextArea fx:id="shortDescription" editable="false" layoutX="80.0" layoutY="181.0" prefHeight="107.0" prefWidth="600.0" text="Đây là hội thảo dành cho các bạn đam mê công nghệ. Nó là cơ hội để các bạn giao lưu và học hỏi từ những người giàu kinh nghiệm." wrapText="true">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </TextArea>
+            <TextArea fx:id="location" editable="false" layoutX="128.0" layoutY="39.0" prefHeight="72.0" prefWidth="550.0" text="Đại Học KHTN, Nguyễn Văn Cừ, Q5, TP. HCM" wrapText="true">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </TextArea>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="260.0" layoutX="702.0" layoutY="29.0" stroke="#ff9900" strokeType="INSIDE" width="523.0" />
+            <ImageView fx:id="avatar" fitHeight="252.0" fitWidth="514.0" layoutX="707.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true" />
+            <Label layoutX="319.0" layoutY="144.0" text="Đã duyệt:">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="accepted" layoutX="418.0" layoutY="144.0" text="50 người">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="listRegister" layoutX="19.0" layoutY="85.0" prefHeight="608.0" prefWidth="1245.0" visible="false">
+          <children>
+            <Label layoutX="221.0" layoutY="6.0" text="Danh sách đăng ký">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+              <TableView fx:id="tbRegister" layoutX="10.0" layoutY="40.0" prefHeight="560.0" prefWidth="600.0" visible="true">
+                <columns>
+                <TableColumn fx:id="number1" prefWidth="50.0" text="STT" />
+                <TableColumn fx:id="fullname1" prefWidth="550.0" text="Họ và Tên" />
+                </columns>
+              </TableView>
+              <TableView fx:id="tbAttend" layoutX="630.0" layoutY="40.0" prefHeight="560.0" prefWidth="600.0">
+                <columns>
+                <TableColumn fx:id="number2" prefWidth="50.0" text="STT" />
+                <TableColumn fx:id="fullname2" prefWidth="550.0" text="Họ và Tên" />
+                </columns>
+              </TableView>
+            <Label layoutX="781.0" layoutY="6.0" text="Danh sách được duyệt tham gia">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+          </children>
+      </AnchorPane>
+      <Button fx:id="cancel" layoutX="1034.0" layoutY="14.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="178.0" text="Hủy đăng ký" textFill="WHITE" visible="false">
          <font>
             <Font name="System Bold" size="20.0" />
          </font>
-      </Label>
-      <Label fx:id="time" layoutX="143.0" layoutY="89.0" text="7:00 - 01/07/2020">
+      </Button>
+      <Button fx:id="btnBack" mnemonicParsing="false" prefHeight="33.0" prefWidth="143.0" style="-fx-background-color: #ffffff; -fx-background-radius: 60; -fx-border-radius: 60;" text="Trở Về">
+         <graphic>
+            <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/back.png" />
+               </image>
+            </ImageView>
+         </graphic>
          <font>
-            <Font size="20.0" />
+            <Font name="System Bold" size="16.0" />
          </font>
-      </Label>
-      <Label layoutX="43.0" layoutY="124.0" text="Địa điểm:">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="41.0" layoutY="199.0" text="Số người đã đăng ký:">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <Label fx:id="participants" layoutX="252.0" layoutY="199.0" text="25 người">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="40.0" layoutY="230.0" text="Số người tối đa:">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <Label fx:id="size" layoutX="199.0" layoutY="230.0" text="50 người">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="40.0" layoutY="263.0" text="Mô tả:">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="42.0" layoutY="371.0" text="Mô tả chi tiết:">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <TextArea fx:id="longDescription" editable="false" layoutX="41.0" layoutY="401.0" prefHeight="276.0" prefWidth="1198.0" wrapText="true">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </TextArea>
-      <TextArea fx:id="shortDescription" editable="false" layoutX="108.0" layoutY="263.0" prefHeight="107.0" prefWidth="589.0" text="Đây là hội thảo dành cho các bạn đam mê công nghệ. Nó là cơ hội để các bạn giao lưu và học hỏi từ những người giàu kinh nghiệm." wrapText="true">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </TextArea>
-      <TextArea fx:id="location" editable="false" layoutX="143.0" layoutY="121.0" prefHeight="72.0" prefWidth="550.0" text="Đại Học KHTN, Nguyễn Văn Cừ, Q5, TP. HCM" wrapText="true">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </TextArea>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="260.0" layoutX="715.0" layoutY="110.0" stroke="#ff9900" strokeType="INSIDE" width="523.0" />
-      <ImageView fx:id="avatar" fitHeight="252.0" fitWidth="514.0" layoutX="719.0" layoutY="114.0" pickOnBounds="true" preserveRatio="true" />
+      </Button>
    </children>
 </AnchorPane>

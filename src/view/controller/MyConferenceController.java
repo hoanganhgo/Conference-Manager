@@ -94,6 +94,9 @@ public class MyConferenceController implements Initializable {
     private MenuButton searchFilter;
     
     @FXML
+    private Button btnBack;
+    
+    @FXML
     private MenuItem searchConference;   //type=1
     
     @FXML
@@ -169,6 +172,8 @@ public class MyConferenceController implements Initializable {
                 DetailController detailController= loader.getController();
                 detailController.transferMessage(data.getId(), data.getName(), data.getDateTime(), location, size, data.getDescriptionContent(), longDescription, avatar);
                 detailController.setVisibleRegister(false);
+                detailController.authorTransfer(data.getId(), data.getStatus());
+                Business.previous_screen=2;
                 
                 //Khởi tạo frame
                 Stage detail=new Stage();
@@ -180,6 +185,7 @@ public class MyConferenceController implements Initializable {
                 detail.centerOnScreen();
                 
                 detail.show();
+                Business.myConferenceStage.close();
             }
         });
         
@@ -201,10 +207,7 @@ public class MyConferenceController implements Initializable {
                         String name=e[1].toString().toLowerCase();
                 
                         if (name.contains(content)){
-                            //Kiểm tra tình trạng hội nghị
-                            Integer size=((Location)e[4]).getSize();
-                            Integer participants=Business.countParticipants((int)e[0]);
-                            String status = Business.checkStatus(participants, size, (Date)e[2]);
+                           String status = Business.checkStatus((int)e[5]);
             
                             //Thêm hội nghị vào giao diện
                             list.add(new MeetingModel((int)e[0], number++, e[1].toString(), (Date)e[2], status, e[3].toString()));
@@ -216,10 +219,7 @@ public class MyConferenceController implements Initializable {
                         String location=((Location)e[4]).getName().toLowerCase();
                 
                         if (location.contains(content)){
-                            //Kiểm tra tình trạng hội nghị
-                            Integer size=((Location)e[4]).getSize();
-                            Integer participants=Business.countParticipants((int)e[0]);
-                            String status = Business.checkStatus(participants, size, (Date)e[2]);
+                            String status = Business.checkStatus((int)e[5]);
             
                             //Thêm hội nghị vào giao diện
                             list.add(new MeetingModel((int)e[0], number++, e[1].toString(), (Date)e[2], status, e[3].toString()));
@@ -231,10 +231,7 @@ public class MyConferenceController implements Initializable {
                         String description=e[3].toString().toLowerCase();
                 
                         if (description.contains(content)){
-                            //Kiểm tra tình trạng hội nghị
-                            Integer size=((Location)e[4]).getSize();
-                            Integer participants=Business.countParticipants((int)e[0]);
-                            String status = Business.checkStatus(participants, size, (Date)e[2]);
+                            String status = Business.checkStatus((int)e[5]);
             
                             //Thêm hội nghị vào giao diện
                             list.add(new MeetingModel((int)e[0], number++, e[1].toString(), (Date)e[2], status, e[3].toString()));
@@ -507,6 +504,10 @@ public class MyConferenceController implements Initializable {
                 searchBox.setPromptText("Tìm kiếm theo mô tả");
             }
         });
+        
+        btnBack.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event)->{
+            Business.homeStage = Business.back(getClass().getResource("../frame/Home.fxml"), "Trang chủ");
+            Business.closeWindow(event);
+        });
     }    
-    
 }
