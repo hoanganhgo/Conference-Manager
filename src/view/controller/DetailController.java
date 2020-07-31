@@ -1,7 +1,6 @@
 package view.controller;
 
 import dao.Business;
-import entity.Location;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -11,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -30,7 +28,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import view.model.MeetingModel;
 import view.model.NameModel;
 import java.util.List;
 import java.util.Optional;

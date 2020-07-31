@@ -29,7 +29,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import view.model.ManageMeetingModel;
-import view.model.MeetingModel;
 
 public class ManageConferenceController implements Initializable {
 

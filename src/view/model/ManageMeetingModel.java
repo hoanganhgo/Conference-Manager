@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,7 +18,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import view.controller.ApprovalController;
 import view.controller.CreateConferenceController;
-import view.controller.DetailController;
 import view.controller.HomeController;
 
 public class ManageMeetingModel {

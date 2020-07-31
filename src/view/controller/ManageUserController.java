@@ -1,11 +1,9 @@
 package view.controller;
 
 import dao.Business;
-import entity.Location;
 import entity.User;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -23,7 +21,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import view.model.ManageMeetingModel;
 import view.model.ManageUserModel;
 
 public class ManageUserController implements Initializable {

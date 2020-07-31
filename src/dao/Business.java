@@ -2,7 +2,6 @@ package dao;
 
 import entity.User;
 import entity.Meeting;
-import entity.Attendance;
 import entity.Location;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -16,20 +15,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import javafx.stage.Window;
-import view.controller.HomeController;
 import view.model.MeetingModel;
 
 public class Business {    

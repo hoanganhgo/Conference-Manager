@@ -25,7 +25,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import view.model.LocationModel;
-import view.model.MeetingModel;
 
 
 public class LocationController implements Initializable {

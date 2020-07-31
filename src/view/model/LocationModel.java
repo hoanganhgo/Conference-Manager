@@ -1,11 +1,8 @@
 package view.model;
 
-import entity.Location;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 
 public class LocationModel {
     private int number;
